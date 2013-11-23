@@ -95,7 +95,25 @@ namespace Grabacr07.KanColleWrapper.Models
 
 		#endregion
 
-		/// <summary>
+        #region Name 変更通知プロパティ
+
+        private string _Name;
+
+        public string Name
+        {
+            get { return this._Name; }
+            private set
+            {
+                if (this._Name != value)
+                {
+                    this._Name = value;
+                    this.RaisePropertyChanged();
+                }
+            }
+        }
+
+        #endregion
+        /// <summary>
 		/// 艦隊が遠征から帰ったときに発生します。
 		/// </summary>
 		public event EventHandler<ExpeditionReturnedEventArgs> Returned;
@@ -113,12 +131,14 @@ namespace Grabacr07.KanColleWrapper.Models
 				this.IsInExecution = false;
 				this.ReturnTime = null;
 				this.Remaining = null;
+                this.Name = null;
 			}
 			else
 			{
 				this.Id = (int)rawData[1];
 				this.ReturnTime = Definitions.UnixEpoch.AddMilliseconds(rawData[2]);
 				this.IsInExecution = true;
+                this.Name = ExpeditionNameDic.ContainsKey(this.Id) ? ExpeditionNameDic[this.Id] : unknownName;
 				this.UpdateCore();
 			}
 		}
@@ -149,5 +169,46 @@ namespace Grabacr07.KanColleWrapper.Models
 			base.Tick();
 			this.UpdateCore();
 		}
+        const string unknownName = "Unknown";
+        protected Dictionary<int, string> ExpeditionNameDic = new Dictionary<int, string>() 
+        { 
+			{1,"練習航海"},
+			{2,"長距離練習航海"},
+			{3,"警備任務"},
+			{4,"対潜警戒任務"},
+			{5,"海上護衛任務"},
+			{6,"防空射撃演習"},
+			{7,"観艦式予行"},
+			{8,"観艦式"},
+			{9,"タンカー護衛任務"},
+			{10,"強行偵察任務"},
+			{11,"ボーキサイト輸送任務"},
+			{12,"資源輸送任務"},
+			{13,"鼠輸送作戦"},
+			{14,"包囲陸戦隊撤収作戦"},
+			{15,"囮機動部隊支援作戦"},
+			{16,"艦隊決戦援護作戦"},
+			{17,"敵地偵察作戦"},
+			{18,"航空機輸送作戦"},
+			{19,"北号作戦"},
+			{20,"潜水艦哨戒任務"},
+			{21,unknownName},
+			{22,unknownName},
+			{23,unknownName},
+			{24,unknownName},
+			{25,"通商破壊作戦"},
+			{26,"敵母港空襲作戦"},
+			{27,"潜水艦通商破壊作戦"},
+			{28,unknownName},
+			{29,unknownName},
+			{30,unknownName},
+			{31,unknownName},
+			{32,unknownName},
+			{33,"前衛支援任務"},
+			{34,"艦隊決戦支援任務"},
+			{35,"MO作戦"},
+			{36,"水上機基地建設"}
+        };
+
 	}
 }

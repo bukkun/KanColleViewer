@@ -42,6 +42,16 @@ namespace Grabacr07.KanColleViewer.ViewModels
 			}
 		}
 
+        public string Name
+        {
+            get
+            {
+                return null != this.source.Name
+                    ? this.source.Name
+                    : "--";
+            }
+        }
+
 		#region IsNotifyReturned 変更通知プロパティ
 
 		private bool _IsNotifyReturned;

@@ -1,0 +1,231 @@
+﻿<UserControl x:Class="Grabacr07.KanColleViewer.Views.Sidebar"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+			 xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:livet="http://schemas.livet-mvvm.net/2011/wpf"
+			 xmlns:fleets="clr-namespace:Grabacr07.KanColleViewer.ViewModels.Fleets"
+			 xmlns:controls="clr-namespace:Grabacr07.KanColleViewer.Views.Controls"
+			 xmlns:views="clr-namespace:Grabacr07.KanColleViewer.Views"
+			 xmlns:vm="clr-namespace:Grabacr07.KanColleViewer.ViewModels"
+			 xmlns:behaviors="clr-namespace:Grabacr07.KanColleViewer.Views.Behaviors"
+			 xmlns:docks="clr-namespace:Grabacr07.KanColleViewer.ViewModels.Docks"
+			 xmlns:kanColleViewer="clr-namespace:Grabacr07.KanColleViewer"
+			 mc:Ignorable="d"
+			 d:DesignWidth="150"
+			 d:DesignHeight="572"
+			 d:DataContext="{d:DesignInstance vm:KanColleMonitorViewModel}">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <TextBlock Grid.Row="1"
+                   Text="遠征"
+                   FontSize="20"
+                   TextTrimming="CharacterEllipsis"
+                   Foreground="{DynamicResource AccentForegroundBrushKey}"
+                   Background="{DynamicResource AccentBrushKey}"
+                   VerticalAlignment="Center"
+                   Margin="5,5,5,0" />
+
+        <Grid Grid.Row="2" DataContext="{Binding Homeport.Fleets}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <ItemsControl ItemsSource="{Binding Fleets}"
+		              Margin="5,0"
+		              Grid.IsSharedSizeScope="True"
+		              d:DataContext="{d:DesignData /SampleData/FleetsViewModelSampleData.xaml}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border x:Name="Root"
+					        Margin="0,0,0,2"
+					        BorderThickness="1"
+					        BorderBrush="{DynamicResource ActiveBorderBrushKey}"
+					        Padding="0,0">
+                            <i:Interaction.Triggers>
+                                <livet:InteractionMessageTrigger Messenger="{Binding Expedition.Messenger, Mode=OneWay}"
+							                                 MessageKey="Window/Activate">
+                                    <livet:WindowInteractionMessageAction />
+                                </livet:InteractionMessageTrigger>
+                            </i:Interaction.Triggers>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"
+								                  SharedSizeGroup="RemainingTime" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock x:Name="RemainingTime"
+							           Grid.Column="0"
+							           VerticalAlignment="Center"
+							           Margin="10,0">
+								<Run Text="{Binding Expedition.Name, Mode=OneWay}"
+								     FontSize="14"
+								     Style="{DynamicResource PickupTextElementStyleKey}" />
+								<LineBreak />
+								<Run Text="{Binding Expedition.Remaining, Mode=OneWay}"
+								     FontSize="14"
+								     Style="{DynamicResource PickupTextElementStyleKey}" />
+                                </TextBlock>
+                                <TextBlock x:Name="NotExecutionMessage"
+							           Grid.Column="0"
+							           HorizontalAlignment="Center"
+							           VerticalAlignment="Center"
+							           Margin="30,0"
+							           Visibility="Collapsed">
+								<Run Text="お留守番"
+								     FontSize="18" />
+                                </TextBlock>
+                            </Grid>
+                        </Border>
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding Id, Mode=OneWay}"
+						             Value="1">
+                                <Setter TargetName="Root"
+							        Property="Visibility"
+							        Value="Collapsed" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Expedition.IsInExecution, Mode=OneWay}"
+						             Value="False">
+                                <Setter TargetName="RemainingTime"
+							        Property="Visibility"
+							        Value="Collapsed" />
+                                <Setter TargetName="NotExecutionMessage"
+							        Property="Visibility"
+							        Value="Visible" />
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+        
+        <TextBlock Grid.Row="3"
+                   Text="入渠"
+                   FontSize="20"
+                   TextTrimming="CharacterEllipsis"
+                   Foreground="{DynamicResource AccentForegroundBrushKey}"
+                   Background="{DynamicResource AccentBrushKey}"
+                   VerticalAlignment="Center"
+                   Margin="5,5,5,0" />
+
+        <Grid Grid.Row="4" DataContext="{Binding Homeport.Repairyard}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <ItemsControl ItemsSource="{Binding Docks}"
+					  Margin="5,0"
+					  d:DataContext="{d:DesignData /SampleData/RepairyardViewModelSampleData.xaml}"
+					  Grid.IsSharedSizeScope="True">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="0,0,0,2"
+							BorderThickness="1"
+							BorderBrush="{DynamicResource ActiveBorderBrushKey}"
+							Padding="0,0">
+                            <i:Interaction.Triggers>
+                                <livet:InteractionMessageTrigger Messenger="{Binding Messenger, Mode=OneWay}"
+															 MessageKey="Window/Activate">
+                                    <livet:WindowInteractionMessageAction />
+                                </livet:InteractionMessageTrigger>
+                            </i:Interaction.Triggers>
+
+                            <Grid x:Name="Root">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"
+												  SharedSizeGroup="Number" />
+                                    <ColumnDefinition Width="Auto"
+												  SharedSizeGroup="ShipName" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Text="{Binding Id, Mode=OneWay}"
+									   FontFamily="Segoe UI"
+									   FontSize="20"
+									   Foreground="{DynamicResource ActiveForegroundBrushKey}"
+									   VerticalAlignment="Center"
+									   HorizontalAlignment="Center"
+									   Margin="10,5" />
+
+                                <TextBlock x:Name="ShipName"
+									   Grid.Column="1"
+									   VerticalAlignment="Center"
+									   Margin="10,0">
+								<Run Text="{Binding Ship, Mode=OneWay}"
+									 FontSize="16"
+									 Style="{DynamicResource PickupTextElementStyleKey}" />
+                                <LineBreak/>
+								<Run Text="{Binding Remaining, Mode=OneWay}"
+									 FontSize="14"
+									 Style="{DynamicResource PickupTextElementStyleKey}" />
+                                </TextBlock>
+
+                                <TextBlock x:Name="UnlockedMessage"
+									   Grid.Column="1"
+									   Grid.ColumnSpan="3"
+									   HorizontalAlignment="Center"
+									   VerticalAlignment="Center"
+									   Margin="30,0"
+									   Visibility="Collapsed">
+								<Run Text="未使用"
+									 FontSize="18" />
+                                </TextBlock>
+                                <TextBlock x:Name="LockedMessage"
+									   Grid.Column="1"
+									   Grid.ColumnSpan="3"
+									   HorizontalAlignment="Center"
+									   VerticalAlignment="Center"
+									   Margin="30,0"
+									   Visibility="Collapsed">
+								<Run Text="ロックされています"
+									 FontSize="18" />
+                                </TextBlock>
+                            </Grid>
+                        </Border>
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding State, Mode=OneWay}"
+									 Value="Locked">
+                                <Setter TargetName="Root"
+									Property="Opacity"
+									Value="0.5" />
+                                <Setter TargetName="ShipName"
+									Property="Visibility"
+									Value="Collapsed" />
+                                <Setter TargetName="LockedMessage"
+									Property="Visibility"
+									Value="Visible" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding State, Mode=OneWay}"
+									 Value="Unlocked">
+                                <Setter TargetName="ShipName"
+									Property="Visibility"
+									Value="Collapsed" />
+                                <Setter TargetName="UnlockedMessage"
+									Property="Visibility"
+									Value="Visible" />
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+
+            <!--<Rectangle Grid.Column="1"
+				   Width="1"
+				   Style="{DynamicResource SeparatorRectangleStyleKey}"
+				   Margin="0,0,0,10" />-->
+        </Grid>
+    </Grid>
+</UserControl>

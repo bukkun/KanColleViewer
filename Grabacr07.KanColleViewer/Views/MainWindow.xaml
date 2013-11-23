@@ -29,17 +29,22 @@
 					  CornerRadius="0" />
 	</chrome:MetroWindow.WindowChrome>
 
-	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="*" />
-			<RowDefinition Height="25" />
-		</Grid.RowDefinitions>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="25" />
+        </Grid.RowDefinitions>
 
-		<!-- #region CaptionBar -->
-		<Border x:Name="CaptionBar"
+        <!-- #region CaptionBar -->
+        <Border x:Name="CaptionBar"
+                Grid.ColumnSpan="3"
 				Panel.ZIndex="100">
 			<i:Interaction.Behaviors>
 				<behaviors:InactiveOpacityBehavior IsActive="{Binding ElementName=GlowMetroWindow, Path=IsActive, Mode=OneWay}" />
@@ -76,17 +81,32 @@
 							Orientation="Horizontal"
 							HorizontalAlignment="Right"
 							VerticalAlignment="Top">
-					<chrome:CaptionButton WindowAction="Minimize" />
-					<chrome:CaptionButton WindowAction="Maximize" />
-					<chrome:CaptionButton WindowAction="Normalize" />
-					<chrome:CaptionButton WindowAction="Close" />
-				</StackPanel>
-			</Grid>
-		</Border>
-		<!-- #endregion -->
+                    <chrome:CaptionButton WindowAction="Minimize" />
+                    <chrome:CaptionButton WindowAction="Maximize" />
+                    <chrome:CaptionButton WindowAction="Normalize" />
+                    <chrome:CaptionButton WindowAction="Close" />
+                </StackPanel>
+            </Grid>
+        </Border>
+        <!-- #endregion -->
+        
+        <!-- region side status area -->
+        <ContentControl Grid.Row="1"
+              Grid.Column="0"
+              Content="{Binding Content}">
+            <ContentControl.Resources>
+                <DataTemplate DataType="{x:Type vm:NotStartedViewModel}">
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:KanColleMonitorViewModel}">
+                    <views:Sidebar/>
+                </DataTemplate>
+            </ContentControl.Resources>
+        </ContentControl>
+        <!-- endregion -->
 
 		<WebBrowser x:Name="WebBrowser"
 					Grid.Row="1"
+                    Grid.Column="1"
 					Width="960"
 					Height="572">
 			<i:Interaction.Behaviors>
@@ -109,21 +129,23 @@
 									Padding="2" />
 		</Grid>-->
 
-		<ContentControl Grid.Row="3"
-						Content="{Binding Content}">
-			<ContentControl.Resources>
-				<DataTemplate DataType="{x:Type vm:NotStartedViewModel}">
-					<views:NotStarted Width="{Binding ElementName=WebBrowser, Path=Width}" />
-				</DataTemplate>
-				<DataTemplate DataType="{x:Type vm:KanColleMonitorViewModel}">
-					<views:KanColleMonitor />
-				</DataTemplate>
-			</ContentControl.Resources>
-		</ContentControl>
+        <ContentControl Grid.Row="3"
+                        Grid.ColumnSpan="2" 
+                        Content="{Binding Content}">
+            <ContentControl.Resources>
+                <DataTemplate DataType="{x:Type vm:NotStartedViewModel}">
+                    <views:NotStarted Width="{Binding ElementName=WebBrowser, Path=Width}" />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:KanColleMonitorViewModel}">
+                    <views:KanColleMonitor />
+                </DataTemplate>
+            </ContentControl.Resources>
+        </ContentControl>
 
-		<!-- region Status area -->
-		<Grid Grid.Row="4"
-			  Background="{DynamicResource AccentBrushKey}"
+        <!-- region Status area -->
+        <Grid Grid.Row="4"
+              Grid.ColumnSpan="2"
+              Background="{DynamicResource AccentBrushKey}"
 			  Panel.ZIndex="100">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="*" />
