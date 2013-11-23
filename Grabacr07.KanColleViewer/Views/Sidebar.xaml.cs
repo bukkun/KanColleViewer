@@ -15,14 +15,14 @@ using System.Windows.Shapes;
 
 namespace Grabacr07.KanColleViewer.Views
 {
-    /// <summary>
-    /// Sidebar.xaml の相互作用ロジック
-    /// </summary>
-    public partial class Sidebar : UserControl
-    {
-        public Sidebar()
-        {
-            InitializeComponent();
-        }
-    }
+	/// <summary>
+	/// Sidebar.xaml の相互作用ロジック
+	/// </summary>
+	public partial class Sidebar : UserControl
+	{
+		public Sidebar()
+		{
+			InitializeComponent();
+		}
+	}
 }

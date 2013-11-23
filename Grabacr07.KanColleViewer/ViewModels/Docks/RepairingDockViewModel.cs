@@ -21,28 +21,32 @@ namespace Grabacr07.KanColleViewer.ViewModels.Docks
 
 		public string Ship
 		{
-			get { 
-                return null != this.source.Ship 
-                    ? this.source.Ship.Info.Name 
-                    : "----" ; 
-            }
+			get
+			{
+				return null != this.source.Ship
+					? this.source.Ship.Info.Name
+					: "----";
+			}
 		}
 
 		public string CompleteTime
 		{
-			get { 
-                return this.source.CompleteTime.HasValue 
-                    ? this.source.CompleteTime.Value.LocalDateTime.ToString("MM/dd HH:mm") 
-                    : "--/-- --:--:--";
-            }
+			get
+			{
+				return this.source.CompleteTime.HasValue
+					? this.source.CompleteTime.Value.LocalDateTime.ToString("MM/dd HH:mm")
+					: "--/-- --:--:--";
+			}
 		}
 
 		public string Remaining
 		{
-			get { return this.source.Remaining.HasValue 
-                ? this.source.Remaining.Value.ToString(@"hh\:mm\:ss") 
-                : "--:--:--"; 
-            }
+			get
+			{
+				return this.source.Remaining.HasValue
+					? this.source.Remaining.Value.ToString(@"hh\:mm\:ss")
+					: "--:--:--";
+			}
 		}
 
 		public RepairingDockState State

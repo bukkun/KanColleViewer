@@ -95,25 +95,25 @@ namespace Grabacr07.KanColleWrapper.Models
 
 		#endregion
 
-        #region Name 変更通知プロパティ
+		#region Name 変更通知プロパティ
 
-        private string _Name;
+		private string _Name;
 
-        public string Name
-        {
-            get { return this._Name; }
-            private set
-            {
-                if (this._Name != value)
-                {
-                    this._Name = value;
-                    this.RaisePropertyChanged();
-                }
-            }
-        }
+		public string Name
+		{
+			get { return this._Name; }
+			private set
+			{
+				if (this._Name != value)
+				{
+					this._Name = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
 
-        #endregion
-        /// <summary>
+		#endregion
+		/// <summary>
 		/// 艦隊が遠征から帰ったときに発生します。
 		/// </summary>
 		public event EventHandler<ExpeditionReturnedEventArgs> Returned;
@@ -131,14 +131,14 @@ namespace Grabacr07.KanColleWrapper.Models
 				this.IsInExecution = false;
 				this.ReturnTime = null;
 				this.Remaining = null;
-                this.Name = null;
+				this.Name = null;
 			}
 			else
 			{
 				this.Id = (int)rawData[1];
 				this.ReturnTime = Definitions.UnixEpoch.AddMilliseconds(rawData[2]);
 				this.IsInExecution = true;
-                this.Name = ExpeditionNameDic.ContainsKey(this.Id) ? ExpeditionNameDic[this.Id] : unknownName;
+				this.Name = ExpeditionNameDic.ContainsKey(this.Id) ? ExpeditionNameDic[this.Id] : unknownName;
 				this.UpdateCore();
 			}
 		}
@@ -169,8 +169,8 @@ namespace Grabacr07.KanColleWrapper.Models
 			base.Tick();
 			this.UpdateCore();
 		}
-        const string unknownName = "Unknown";
-        protected Dictionary<int, string> ExpeditionNameDic = new Dictionary<int, string>() 
+		const string unknownName = "Unknown";
+		protected Dictionary<int, string> ExpeditionNameDic = new Dictionary<int, string>() 
         { 
 			{1,"練習航海"},
 			{2,"長距離練習航海"},
