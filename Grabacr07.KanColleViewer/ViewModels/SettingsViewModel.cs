@@ -17,6 +17,21 @@ namespace Grabacr07.KanColleViewer.ViewModels
 			get { return Settings.Current.ScreenshotFolder; }
 			set { Settings.Current.ScreenshotFolder = value; }
 		}
+		public string BuildingCompleteSoundFile
+		{
+			get { return Settings.Current.BuildingCompleteSoundFile; }
+			set { Settings.Current.BuildingCompleteSoundFile = value; }
+		}
+		public string ExpeditionReturnedSoundFile
+		{
+			get { return Settings.Current.ExpeditionReturnedSoundFile; }
+			set { Settings.Current.ExpeditionReturnedSoundFile = value; }
+		}
+		public string RepairingCompleteSoundFile
+		{
+			get { return Settings.Current.RepairingCompleteSoundFile; }
+			set { Settings.Current.RepairingCompleteSoundFile = value; }
+		}
 
 		public SettingsViewModel()
 		{

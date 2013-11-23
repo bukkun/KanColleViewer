@@ -68,5 +68,61 @@
 		</StackPanel>
 		<Rectangle Height="1"
 				   Style="{DynamicResource SeparatorRectangleStyleKey}" />
-	</StackPanel>
+
+        <StackPanel Margin="0,12">
+            <TextBlock>
+				<Run Text="通知Waveファイル設定"
+					 Style="{DynamicResource PickupTextElementStyleKey}" />
+            </TextBlock>
+            <Grid Margin="10,6,10,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                
+
+                <TextBlock Text="遠征帰投時  "
+						   VerticalAlignment="Center"
+						   Margin="0,6" 
+                           Grid.Row="0"/>
+                <controls:PromptTextBox Grid.Row="0"
+										Grid.Column="1"
+										Text="{Binding ExpeditionReturnedSoundFile}"
+										Prompt="再生ファイル パス"
+                                        Margin="0,5"
+										Padding="2" />
+
+                <TextBlock Text="整備完了時  "
+						   VerticalAlignment="Center"
+						   Margin="0,6" 
+                           Grid.Row="1"/>
+                <controls:PromptTextBox Grid.Row="1"
+										Grid.Column="1"
+										Text="{Binding RepairingCompleteSoundFile}"
+										Prompt="再生ファイル パス"
+                                        Margin="0,5"
+										Padding="2" />
+                <TextBlock Text="建造完了時  "
+						   VerticalAlignment="Center"
+						   Margin="0,6" 
+                           Grid.Row="2"/>
+                <controls:PromptTextBox Grid.Row="2"
+										Grid.Column="1"
+										Text="{Binding BuildingCompleteSoundFile}"
+										Prompt="再生ファイル パス"
+                                        Margin="0,5"
+										Padding="2" />
+            </Grid>
+        </StackPanel>
+        <Rectangle Height="1"
+				   Style="{DynamicResource SeparatorRectangleStyleKey}" />
+
+    </StackPanel>
 </UserControl>

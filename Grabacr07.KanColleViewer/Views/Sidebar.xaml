@@ -14,7 +14,7 @@
 			 xmlns:docks="clr-namespace:Grabacr07.KanColleViewer.ViewModels.Docks"
 			 xmlns:kanColleViewer="clr-namespace:Grabacr07.KanColleViewer"
 			 mc:Ignorable="d"
-			 d:DesignWidth="150"
+			 d:DesignWidth="250"
 			 d:DesignHeight="572"
 			 d:DataContext="{d:DesignInstance vm:KanColleMonitorViewModel}">
     
@@ -83,7 +83,7 @@
 							           Grid.Column="0"
 							           HorizontalAlignment="Center"
 							           VerticalAlignment="Center"
-							           Margin="30,0"
+							           Margin="30,10"
 							           Visibility="Collapsed">
 								<Run Text="お留守番"
 								     FontSize="18" />

@@ -171,6 +171,65 @@ namespace Grabacr07.KanColleViewer.Model
 
 		#endregion
 
+		#region BuildingCompleteSoundFile 変更通知プロパティ
+
+		private string _BuildingCompleteSoundFile;
+
+		/// <summary>
+		/// 建造完了時に再生する音声を取得または設定します。
+		/// </summary>
+		public string BuildingCompleteSoundFile
+		{
+			get { return this._BuildingCompleteSoundFile; }
+			set
+			{
+				if (this._BuildingCompleteSoundFile != value)
+				{
+					this._BuildingCompleteSoundFile = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
+
+		#endregion
+
+		#region ExpeditionReturnedSoundFile 変更通知プロパティ
+
+		private string _ExpeditionReturnedSoundFile;
+
+		public string ExpeditionReturnedSoundFile
+		{
+			get { return this._ExpeditionReturnedSoundFile; }
+			set
+			{
+				if (this._ExpeditionReturnedSoundFile != value)
+				{
+					this._ExpeditionReturnedSoundFile = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
+
+		#endregion
+
+		#region RepairingCompleteSoundFile 変更通知プロパティ
+
+		private string _RepairingCompleteSoundFile;
+
+		public string RepairingCompleteSoundFile
+		{
+			get { return this._RepairingCompleteSoundFile; }
+			set
+			{
+				if (this._RepairingCompleteSoundFile != value)
+				{
+					this._RepairingCompleteSoundFile = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
+
+		#endregion
 
 		public void Save()
 		{

@@ -13,6 +13,7 @@ namespace Grabacr07.KanColleViewer.ViewModels.Docks
 	public class RepairingDockViewModel : ViewModel
 	{
 		private readonly RepairingDock source;
+		private System.Media.SoundPlayer notifySoundPlayer;
 
 		public int Id
 		{
@@ -88,6 +89,33 @@ namespace Grabacr07.KanColleViewer.ViewModels.Docks
 							"整備完了",
 							string.Format("入渠第 {0} ドックでの「{1}」の整備が完了しました。", this.Id, this.Ship),
 							() => this.Messenger.Raise(new WindowActionMessage(WindowAction.Active, "Window/Activate")));
+
+						var pathStr = Settings.Current.RepairingCompleteSoundFile;
+						if (null != pathStr
+							&& string.Empty != pathStr
+							&& System.IO.File.Exists(pathStr))
+						{
+							try
+							{
+								if (null != notifySoundPlayer)
+								{
+									notifySoundPlayer.Stop();
+									notifySoundPlayer.SoundLocation = pathStr;
+								}
+								else
+								{
+									// 新しくインスタンスを生成
+									notifySoundPlayer = new System.Media.SoundPlayer(pathStr);
+								}
+								notifySoundPlayer.Play();
+							}
+							catch (Exception e)
+							{
+								// とりあえず握りつぶし。あとで考える
+								;
+							}
+
+						}
 					}
 				};
 			}

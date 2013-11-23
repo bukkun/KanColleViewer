@@ -14,6 +14,7 @@ namespace Grabacr07.KanColleViewer.ViewModels
 	public class ExpeditionViewModel : ViewModel
 	{
 		private readonly Expedition source;
+		private System.Media.SoundPlayer notifySoundPlayer;
 
 		public bool IsInExecution
 		{
@@ -86,6 +87,33 @@ namespace Grabacr07.KanColleViewer.ViewModels
 							"遠征完了",
 							"「" + args.FleetName + "」が遠征から帰投しました。",
 							() => this.Messenger.Raise(new WindowActionMessage(WindowAction.Active, "Window/Activate")));
+
+						var pathStr = Settings.Current.ExpeditionReturnedSoundFile;
+						if (null != pathStr
+							&& string.Empty != pathStr
+							&& System.IO.File.Exists(pathStr))
+						{
+							try
+							{
+								if (null != notifySoundPlayer)
+								{
+									notifySoundPlayer.Stop();
+									notifySoundPlayer.SoundLocation = pathStr;
+								}
+								else
+								{
+									// 新しくインスタンスを生成
+									notifySoundPlayer = new System.Media.SoundPlayer(pathStr);
+								}
+								notifySoundPlayer.Play();
+							}
+							catch (Exception e)
+							{
+								// とりあえず握りつぶし。あとで考える
+								;
+							}
+
+						}
 					}
 				};
 			}

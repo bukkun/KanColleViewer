@@ -13,6 +13,7 @@ namespace Grabacr07.KanColleViewer.ViewModels.Docks
 	public class BuildingDockViewModel : ViewModel
 	{
 		private readonly BuildingDock source;
+		private System.Media.SoundPlayer notifySoundPlayer;
 
 		public int Id
 		{
@@ -84,7 +85,7 @@ namespace Grabacr07.KanColleViewer.ViewModels.Docks
 		{
 			this.source = source;
 			this.CompositeDisposable.Add(new PropertyChangedEventListener(source, (sender, args) => this.RaisePropertyChanged(args.PropertyName)));
-
+			this.notifySoundPlayer = null;
 			if (Helper.IsWindows8OrGreater)
 			{
 				source.Completed += (sender, args) =>
@@ -95,6 +96,34 @@ namespace Grabacr07.KanColleViewer.ViewModels.Docks
 							"建造完了",
 							string.Format("工廠第 {0} ドックでの{1}の建造が完了しました。", this.Id, this.CanDisplayShipName ? "「" + this.Ship + "」" : "艦娘"),
 							() => this.Messenger.Raise(new WindowActionMessage(WindowAction.Active, "Window/Activate")));
+
+						var pathStr = Settings.Current.BuildingCompleteSoundFile;
+						if (null != pathStr
+							&& string.Empty != pathStr
+							&& System.IO.File.Exists(pathStr))
+						{
+							try
+							{
+								if (null != notifySoundPlayer)
+								{
+									notifySoundPlayer.Stop();
+									notifySoundPlayer.SoundLocation = pathStr;
+								}
+								else
+								{
+									// 新しくインスタンスを生成
+									notifySoundPlayer = new System.Media.SoundPlayer(pathStr);
+								}
+								notifySoundPlayer.Play();
+							}
+							catch (Exception e)
+							{
+								// とりあえず握りつぶし。あとで考える
+								;
+							}
+
+						}
+
 					}
 				};
 			}
