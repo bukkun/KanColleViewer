@@ -63,12 +63,22 @@
 
                             <Grid>
                                 <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"
+												  SharedSizeGroup="Number" />
                                     <ColumnDefinition Width="*"
 								                  SharedSizeGroup="RemainingTime" />
                                 </Grid.ColumnDefinitions>
 
+                                <TextBlock Text="{Binding Id, Mode=OneWay}"
+									   FontFamily="Segoe UI"
+									   FontSize="20"
+									   Foreground="{DynamicResource ActiveForegroundBrushKey}"
+									   VerticalAlignment="Center"
+									   HorizontalAlignment="Center"
+									   Margin="10,5" />
+                                
                                 <TextBlock x:Name="RemainingTime"
-							           Grid.Column="0"
+							           Grid.Column="1"
 							           VerticalAlignment="Center"
 							           Margin="10,0">
 								<Run Text="{Binding Expedition.Name, Mode=OneWay}"
@@ -80,10 +90,10 @@
 								     Style="{DynamicResource PickupTextElementStyleKey}" />
                                 </TextBlock>
                                 <TextBlock x:Name="NotExecutionMessage"
-							           Grid.Column="0"
+							           Grid.Column="1"
 							           HorizontalAlignment="Center"
 							           VerticalAlignment="Center"
-							           Margin="30,10"
+							           Margin="30,0"
 							           Visibility="Collapsed">
 								<Run Text="お留守番"
 								     FontSize="18" />

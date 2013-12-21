@@ -76,13 +76,12 @@
 
 		<Grid Grid.Row="2">
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="Auto" />
-				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="1*" MinWidth="100" />
+				<ColumnDefinition Width="9*" MaxWidth="803" />
 			</Grid.ColumnDefinitions>
 
 			<ScrollViewer VerticalScrollBarVisibility="Auto">
 				<Grid MinWidth="100"
-					  MaxWidth="120"
 					  Background="{DynamicResource ActiveBackgroundBrushKey}">
 					<Grid.RowDefinitions>
 						<RowDefinition Height="Auto" />
