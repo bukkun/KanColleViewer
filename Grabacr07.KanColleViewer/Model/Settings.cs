@@ -171,7 +171,7 @@ namespace Grabacr07.KanColleViewer.Model
 
 		#endregion
 
-		#region BuildingCompleteSoundFile 変更通知プロパティ
+        #region BuildingCompleteSoundFile 変更通知プロパティ
 
 		private string _BuildingCompleteSoundFile;
 

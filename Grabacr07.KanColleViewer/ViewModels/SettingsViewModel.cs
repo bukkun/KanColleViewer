@@ -10,14 +10,14 @@ using Livet.EventListeners;
 
 namespace Grabacr07.KanColleViewer.ViewModels
 {
-	public class SettingsViewModel : ViewModel
-	{
-		public string ScreenshotFolder
-		{
-			get { return Settings.Current.ScreenshotFolder; }
-			set { Settings.Current.ScreenshotFolder = value; }
-		}
-		public string BuildingCompleteSoundFile
+    public class SettingsViewModel : TabItemViewModel
+    {
+        public string ScreenshotFolder
+        {
+            get { return Settings.Current.ScreenshotFolder; }
+            set { Settings.Current.ScreenshotFolder = value; }
+        }
+        public string BuildingCompleteSoundFile
 		{
 			get { return Settings.Current.BuildingCompleteSoundFile; }
 			set { Settings.Current.BuildingCompleteSoundFile = value; }
@@ -33,12 +33,14 @@ namespace Grabacr07.KanColleViewer.ViewModels
 			set { Settings.Current.RepairingCompleteSoundFile = value; }
 		}
 
-		public SettingsViewModel()
-		{
-			this.CompositeDisposable.Add(new PropertyChangedEventListener(Settings.Current)
-			{
-				(sender, args) => this.RaisePropertyChanged(args.PropertyName),
-			});
-		}
+        public SettingsViewModel()
+        {
+            this.Name = "設定";
+
+            this.CompositeDisposable.Add(new PropertyChangedEventListener(Settings.Current)
+            {
+                (sender, args) => this.RaisePropertyChanged(args.PropertyName),
+            });
+        }
 	}
 }

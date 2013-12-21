@@ -6,17 +6,17 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:livet="http://schemas.livet-mvvm.net/2011/wpf"
-			 xmlns:fleets="clr-namespace:Grabacr07.KanColleViewer.ViewModels.Fleets"
+			 xmlns:fleets="clr-namespace:Grabacr07.KanColleViewer.ViewModels.Contents.Fleets"
 			 xmlns:controls="clr-namespace:Grabacr07.KanColleViewer.Views.Controls"
 			 xmlns:views="clr-namespace:Grabacr07.KanColleViewer.Views"
 			 xmlns:vm="clr-namespace:Grabacr07.KanColleViewer.ViewModels"
 			 xmlns:behaviors="clr-namespace:Grabacr07.KanColleViewer.Views.Behaviors"
-			 xmlns:docks="clr-namespace:Grabacr07.KanColleViewer.ViewModels.Docks"
+			 xmlns:docks="clr-namespace:Grabacr07.KanColleViewer.ViewModels.Contents.Docks"
 			 xmlns:kanColleViewer="clr-namespace:Grabacr07.KanColleViewer"
 			 mc:Ignorable="d"
 			 d:DesignWidth="250"
 			 d:DesignHeight="572"
-			 d:DataContext="{d:DesignInstance vm:KanColleMonitorViewModel}">
+			 d:DataContext="{d:DesignInstance vm:MainContentViewModel}">
     
     <Grid>
         <Grid.RowDefinitions>
@@ -37,7 +37,7 @@
                    VerticalAlignment="Center"
                    Margin="5,5,5,0" />
 
-        <Grid Grid.Row="2" DataContext="{Binding Homeport.Fleets}">
+        <Grid Grid.Row="2" DataContext="{Binding TabItems[0]}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
@@ -121,7 +121,7 @@
                    VerticalAlignment="Center"
                    Margin="5,5,5,0" />
 
-        <Grid Grid.Row="4" DataContext="{Binding Homeport.Repairyard}">
+        <Grid Grid.Row="4" DataContext="{Binding TabItems[1]}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
