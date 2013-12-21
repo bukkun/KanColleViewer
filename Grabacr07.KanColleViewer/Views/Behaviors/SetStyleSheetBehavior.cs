@@ -38,7 +38,13 @@ namespace Grabacr07.KanColleViewer.Views.Behaviors
 			if (document == null) return;
 
 			var gameFrame = document.getElementById("game_frame");
-			if (gameFrame == null) return;
+			if (gameFrame == null)
+			{
+				if (document.url.Contains(".swf?"))
+					gameFrame = document.body;
+				else
+					return;
+			}
 
 			var target = gameFrame.document as HTMLDocument;
 			if (target != null)
