@@ -27,6 +27,7 @@
 						Foreground="{DynamicResource ActiveForegroundBrushKey}"
 						BorderBrush="{DynamicResource AccentBrushKey}"
 						InactiveBorderBrush="{DynamicResource BorderBrushKey}"
+						Topmost="{Binding TopMost}"
 						SnapsToDevicePixels="True"
 						TextOptions.TextFormattingMode="Display">
 
@@ -37,20 +38,31 @@
 					  CornerRadius="0" />
 	</chrome:MetroWindow.WindowChrome>
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="23" />
-        </Grid.RowDefinitions>
+	<i:Interaction.Triggers>
+		<livet:InteractionMessageTrigger Messenger="{Binding Messenger}"
+										 MessageKey="Window/Location">
+			<behaviors:SetWindowLocationAction />
+		</livet:InteractionMessageTrigger>
+		<livet:InteractionMessageTrigger Messenger="{Binding Messenger, Mode=OneWay}"
+										 MessageKey="Window/Activate">
+			<livet:WindowInteractionMessageAction />
+		</livet:InteractionMessageTrigger>
+	</i:Interaction.Triggers>
 
-        <!-- #region CaptionBar -->
-        <Border x:Name="CaptionBar"
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="Auto"/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="23" />
+		</Grid.RowDefinitions>
+
+		<!-- #region CaptionBar -->
+		<Border x:Name="CaptionBar"
                 Grid.ColumnSpan="3"
 				Panel.ZIndex="100">
 			<i:Interaction.Behaviors>
@@ -64,52 +76,45 @@
 					<ColumnDefinition Width="Auto" />
 				</Grid.ColumnDefinitions>
 
-				<chrome:CaptionButton Grid.Column="0"
-									  Margin="0"
-									  Padding="10,7"
-									  Width="Auto"
-									  Height="Auto"
-									  WindowChrome.IsHitTestVisibleInChrome="True">
-					<Path Width="20"
-						  Height="20"
-						  Style="{DynamicResource ApplicationIconKey}" />
-				</chrome:CaptionButton>
+				<controls:AppIcon Width="36"
+								  Height="36"
+								  Background="Transparent"
+								  AnchorVisibility="Collapsed"
+								  BandVisibility="Collapsed"/>
 
 				<TextBlock Grid.Column="1"
 						   Text="{Binding Title}"
 						   FontFamily="Segoe UI"
-						   FontSize="18"
-						   Margin="3,8,8,8"
-						   VerticalAlignment="Center"
-						   TextTrimming="CharacterEllipsis"
+						   FontSize="16"
+						   Margin="2,2,8,2"
 						   Opacity="0.85" />
 
 				<StackPanel Grid.Column="2"
 							Orientation="Horizontal"
 							HorizontalAlignment="Right"
 							VerticalAlignment="Top">
-                    <chrome:CaptionButton WindowAction="Minimize" />
-                    <chrome:CaptionButton WindowAction="Maximize" />
-                    <chrome:CaptionButton WindowAction="Normalize" />
-                    <chrome:CaptionButton WindowAction="Close" />
-                </StackPanel>
-            </Grid>
-        </Border>
-        <!-- #endregion -->
-        
-        <!-- region side status area -->
-        <ContentControl Grid.Row="1"
+					<chrome:CaptionButton WindowAction="Minimize" />
+					<chrome:CaptionButton WindowAction="Maximize" />
+					<chrome:CaptionButton WindowAction="Normalize" />
+					<chrome:CaptionButton WindowAction="Close" />
+				</StackPanel>
+			</Grid>
+		</Border>
+		<!-- #endregion -->
+		<!-- region side status area -->
+		<ContentControl Grid.Row="1"
               Grid.Column="0"
               Content="{Binding Content}">
-            <ContentControl.Resources>
-                <DataTemplate DataType="{x:Type viewModels:NotStartedViewModel}">
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type viewModels:MainContentViewModel}">
-                    <views:Sidebar/>
-                </DataTemplate>
-            </ContentControl.Resources>
-        </ContentControl>
-        <!-- endregion -->
+			<ContentControl.Resources>
+				<DataTemplate DataType="{x:Type viewModels:NotStartedViewModel}">
+				</DataTemplate>
+				<DataTemplate DataType="{x:Type viewModels:MainContentViewModel}">
+					<views:Sidebar/>
+				</DataTemplate>
+			</ContentControl.Resources>
+		</ContentControl>
+		<!-- endregion -->
+
 
 		<WebBrowser x:Name="WebBrowser"
 					Grid.Row="1"
@@ -126,6 +131,10 @@
 				<livet:InteractionMessageTrigger Messenger="{Binding Messenger}"
 												 MessageKey="Screenshot/Save">
 					<behaviors:ScreenshotAction />
+				</livet:InteractionMessageTrigger>
+				<livet:InteractionMessageTrigger Messenger="{Binding Messenger}"
+												 MessageKey="WebBrowser/Zoom">
+					<behaviors:ZoomAction />
 				</livet:InteractionMessageTrigger>
 			</i:Interaction.Triggers>
 		</WebBrowser>

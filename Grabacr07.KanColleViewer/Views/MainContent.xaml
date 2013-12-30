@@ -19,6 +19,7 @@
 			 xmlns:vmContents="clr-namespace:Grabacr07.KanColleViewer.ViewModels.Contents"
 			 xmlns:vmDocks="clr-namespace:Grabacr07.KanColleViewer.ViewModels.Contents.Docks"
 			 xmlns:vmFleets="clr-namespace:Grabacr07.KanColleViewer.ViewModels.Contents.Fleets"
+			 xmlns:settings="clr-namespace:Grabacr07.KanColleViewer.Views.Settings"
 			 mc:Ignorable="d"
 			 d:DesignWidth="800"
 			 d:DataContext="{d:DesignInstance vm:MainContentViewModel}"
@@ -46,7 +47,7 @@
 									 Margin="6,0"
 									 Width="50"
 									 Height="38"
-									 DataContext="{Binding Source={x:Static root:App.ViewModelRoot}, Path=Volume}"
+									 DataContext="{Binding Volume}"
 									 IsMute="{Binding IsMute, Mode=OneWay}"
 									 MethodName="ToggleMute" />
 
@@ -75,9 +76,9 @@
 
 		<Grid Grid.Row="2">
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="1*" MinWidth="100" />
-				<ColumnDefinition Width="5*" />
-			</Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" MinWidth="100" />
+                    <ColumnDefinition Width="5*" />
+                </Grid.ColumnDefinitions>
 
 			<ScrollViewer VerticalScrollBarVisibility="Auto">
 				<Grid MinWidth="100"
@@ -106,9 +107,10 @@
 
 			<ScrollViewer Grid.Column="1"
 						  VerticalScrollBarVisibility="Auto"
-						  Height="{Binding Source={x:Static properties:Settings.Default}, Path=UIContentHight}">
+						  VerticalAlignment="Top">
 				<ContentControl DataContext="{Binding SelectedItem}"
-								Content="{Binding}">
+								Content="{Binding}"
+								MinHeight="{Binding Source={x:Static properties:Settings.Default}, Path=UIContentHight}">
 					<ContentControl.Resources>
 						<DataTemplate DataType="{x:Type vmFleets:FleetsViewModel}">
 							<views:Fleets />
@@ -126,7 +128,7 @@
 							<contents:Expeditions />
 						</DataTemplate>
 						<DataTemplate DataType="{x:Type vm:SettingsViewModel}">
-							<views:Settings />
+							<settings:Settings />
 						</DataTemplate>
 					</ContentControl.Resources>
 				</ContentControl>
