@@ -96,6 +96,7 @@ namespace Grabacr07.KanColleViewer.ViewModels.Contents.Docks
 							"建造完了",
 							string.Format("工廠第 {0} ドックでの{1}の建造が完了しました。", this.Id, this.CanDisplayShipName ? "「" + this.Ship + "」" : "艦娘"),
 							() => App.ViewModelRoot.Activate());
+						
 						var pathStr = Settings.Current.BuildingCompleteSoundFile;
 						if (null != pathStr
 							&& string.Empty != pathStr
@@ -134,6 +135,33 @@ namespace Grabacr07.KanColleViewer.ViewModels.Contents.Docks
 						NotifyIconWrapper.Show(
 							"建造完了",
 							string.Format("工廠第 {0} ドックでの{1}の建造が完了しました。", this.Id, this.CanDisplayShipName ? "「" + this.Ship + "」" : "艦娘"));
+						
+						var pathStr = Settings.Current.BuildingCompleteSoundFile;
+						if (null != pathStr
+							&& string.Empty != pathStr
+							&& System.IO.File.Exists(pathStr))
+						{
+							try
+							{
+								if (null != notifySoundPlayer)
+								{
+									notifySoundPlayer.Stop();
+									notifySoundPlayer.SoundLocation = pathStr;
+								}
+								else
+								{
+									// 新しくインスタンスを生成
+									notifySoundPlayer = new System.Media.SoundPlayer(pathStr);
+								}
+								notifySoundPlayer.Play();
+							}
+							catch (Exception e)
+							{
+								// とりあえず握りつぶし。あとで考える
+								;
+							}
+
+						}
 					}
 				};
 			}

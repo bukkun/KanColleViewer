@@ -120,6 +120,33 @@ namespace Grabacr07.KanColleViewer.ViewModels.Docks
 						NotifyIconWrapper.Show(
 							"整備完了",
 							string.Format("入渠第 {0} ドックでの「{1}」の整備が完了しました。", this.Id, this.Ship));
+
+						var pathStr = Settings.Current.RepairingCompleteSoundFile;
+						if (null != pathStr
+							&& string.Empty != pathStr
+							&& System.IO.File.Exists(pathStr))
+						{
+							try
+							{
+								if (null != notifySoundPlayer)
+								{
+									notifySoundPlayer.Stop();
+									notifySoundPlayer.SoundLocation = pathStr;
+								}
+								else
+								{
+									// 新しくインスタンスを生成
+									notifySoundPlayer = new System.Media.SoundPlayer(pathStr);
+								}
+								notifySoundPlayer.Play();
+							}
+							catch (Exception e)
+							{
+								// FIXME とりあえず握りつぶし。あとで考える
+								;
+							}
+
+						}
 					}
 				};
 			}

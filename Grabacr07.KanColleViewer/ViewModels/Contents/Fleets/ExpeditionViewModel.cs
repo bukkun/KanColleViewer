@@ -125,6 +125,33 @@ namespace Grabacr07.KanColleViewer.ViewModels.Contents.Fleets
 						NotifyIconWrapper.Show(
 							"遠征完了",
 							"「" + args.FleetName + "」 が遠征から帰投しました。");
+
+						var pathStr = Settings.Current.ExpeditionReturnedSoundFile;
+						if (null != pathStr
+							&& string.Empty != pathStr
+							&& System.IO.File.Exists(pathStr))
+						{
+							try
+							{
+								if (null != notifySoundPlayer)
+								{
+									notifySoundPlayer.Stop();
+									notifySoundPlayer.SoundLocation = pathStr;
+								}
+								else
+								{
+									// 新しくインスタンスを生成
+									notifySoundPlayer = new System.Media.SoundPlayer(pathStr);
+								}
+								notifySoundPlayer.Play();
+							}
+							catch (Exception e)
+							{
+								// !!FIXME!! とりあえず握りつぶし。あとで考える
+								;
+							}
+
+						}
 					}
 				};
 			}
