@@ -41,6 +41,7 @@ namespace Grabacr07.KanColleViewer.Model
 			{
 				ScreenshotFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures),
 				ScreenshotFilename = "KanColle-{0:d04}.png",
+				ScreenshotImageFormat = SupportedImageFormat.Png,
 				CanDisplayBuildingShipName = false,
 			};
 		}
@@ -92,6 +93,40 @@ namespace Grabacr07.KanColleViewer.Model
 
 		#endregion
 
+		#region ScreenshotImageFormat 変更通知プロパティ
+
+		private SupportedImageFormat _ScreenshotImageFormat;
+
+		/// <summary>
+		/// スクリーンショットのイメージ形式を取得または設定します。
+		/// </summary>
+		public SupportedImageFormat ScreenshotImageFormat
+		{
+			get
+			{
+				switch (this._ScreenshotImageFormat)
+				{
+					case SupportedImageFormat.Png:
+					case SupportedImageFormat.Jpeg:
+						break;
+					default:
+						this._ScreenshotImageFormat = SupportedImageFormat.Png;
+						break;
+				}
+				return this._ScreenshotImageFormat;
+			}
+			set
+			{
+				if (this._ScreenshotImageFormat != value)
+				{
+					this._ScreenshotImageFormat = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
+
+		#endregion
+
 		#region CanDisplayBuildingShipName 変更通知プロパティ
 
 		private bool _CanDisplayBuildingShipName;
@@ -120,7 +155,7 @@ namespace Grabacr07.KanColleViewer.Model
 
 		public bool NotifyBuildingCompleted
 		{
-			get { return this._NotifyBuildingCompleted && Helper.IsWindows8OrGreater; }
+			get { return this._NotifyBuildingCompleted; }
 			set
 			{
 				if (this._NotifyBuildingCompleted != value)
@@ -139,7 +174,7 @@ namespace Grabacr07.KanColleViewer.Model
 
 		public bool NotifyExpeditionReturned
 		{
-			get { return this._NotifyExpeditionReturned && Helper.IsWindows8OrGreater; }
+			get { return this._NotifyExpeditionReturned; }
 			set
 			{
 				if (this._NotifyExpeditionReturned != value)
@@ -158,7 +193,7 @@ namespace Grabacr07.KanColleViewer.Model
 
 		public bool NotifyRepairingCompleted
 		{
-			get { return this._NotifyRepairingCompleted && Helper.IsWindows8OrGreater; }
+			get { return this._NotifyRepairingCompleted; }
 			set
 			{
 				if (this._NotifyRepairingCompleted != value)

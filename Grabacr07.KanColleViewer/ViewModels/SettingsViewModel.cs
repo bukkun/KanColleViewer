@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -46,6 +46,23 @@ namespace Grabacr07.KanColleViewer.ViewModels
 		public bool CanOpenScreenshotFolder
 		{
 			get { return Directory.Exists(this.ScreenshotFolder); }
+		}
+
+		#endregion
+
+		#region ScreenshotImageFormat 変更通知プロパティ
+
+		public SupportedImageFormat ScreenshotImageFormat
+		{
+			get { return Settings.Current.ScreenshotImageFormat; }
+			set
+			{
+				if (Settings.Current.ScreenshotImageFormat != value)
+				{
+					Settings.Current.ScreenshotImageFormat = value;
+					this.RaisePropertyChanged();
+				}
+			}
 		}
 
 		#endregion
@@ -205,7 +222,7 @@ namespace Grabacr07.KanColleViewer.ViewModels
 		{
 			if (Helper.IsInDesignMode) return;
 
-			this.Name = "設定";
+			this.Name = Properties.Resources.ViewModels_Settings;
 
 			this.Libraries = App.ProductInfo.Libraries.Aggregate(
 				new List<BindableTextViewModel>(),

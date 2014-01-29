@@ -118,255 +118,255 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Quests_CurrentQuestList" xml:space="preserve">
-    <value>Active Quests</value>
+    <value>现在进行中的任务</value>
   </data>
   <data name="Quest_Detail_Untaken" xml:space="preserve">
-    <value>Please visit all of the quest pages.</value>
+    <value>请浏览所有的任务画面</value>
   </data>
   <data name="Quest_Title_Untaken" xml:space="preserve">
-    <value>(Unknown quest)</value>
+    <value>(未接受的任务)</value>
   </data>
   <data name="Quests_Untaken" xml:space="preserve">
-    <value>Please open the in-game Quests menu to populate the Quest list.</value>
+    <value>请点击游戏中的 [任務 (クエスト)]，以便取得任务信息</value>
   </data>
   <data name="Quests_Daily" xml:space="preserve">
-    <value>Daily Quests</value>
+    <value>每日任务</value>
   </data>
   <data name="Quests_Weekly" xml:space="preserve">
-    <value>Weekly Quests</value>
+    <value>每周任务</value>
   </data>
   <data name="Quest_Progress_50" xml:space="preserve">
-    <value> 50% </value>
+    <value> 50 % </value>
   </data>
   <data name="Quest_Progress_80" xml:space="preserve">
-    <value> 80% </value>
+    <value> 80 % </value>
   </data>
   <data name="Quest_State_Accomplished" xml:space="preserve">
-    <value> Complete </value>
+    <value>完成</value>
   </data>
   <data name="Quests_Notice" xml:space="preserve">
-    <value>※ The indicators (50%, 80%) mirror in-game indicators. Enemy fleet kills, successful expeditions, etc are not actively counted.</value>
+    <value>※任务完成状况(50 %, 80 %) 和游戏内显示的相同。敌方舰队击破数和远征成功数等不能被显示</value>
   </data>
   <data name="Settings_BrowserControl_Notice" xml:space="preserve">
-    <value>※ This will leave the game, so use with caution</value>
+    <value>※请注意这将会离开游戏</value>
   </data>
   <data name="Settings_Screenshot_FolderSelectionDialog_OpenButton" xml:space="preserve">
-    <value>Browse</value>
+    <value>选择</value>
   </data>
   <data name="Settings_Screenshot_FolderSelectionDialog_Title" xml:space="preserve">
-    <value>Select a location to save screenshots</value>
+    <value>选择一个用来保存截图的文件夹</value>
   </data>
   <data name="Settings_Screenshot_OpenFolderButton" xml:space="preserve">
-    <value>Open Folder</value>
+    <value>打开文件夹</value>
   </data>
   <data name="ZoomAction_OutOfRange" xml:space="preserve">
-    <value>{0}% zoom is not supported.</value>
+    <value>无法在 {0} %范围内缩放</value>
   </data>
   <data name="ZoomAction_ZoomFailed" xml:space="preserve">
-    <value>Zoom Failed: {0}</value>
+    <value>缩放失败: {0}</value>
   </data>
   <data name="Settings_BrowserControl" xml:space="preserve">
-    <value>Browser</value>
+    <value>浏览设置</value>
   </data>
   <data name="Settings_BrowserControl_ClearZoomFactorButton" xml:space="preserve">
-    <value>Reset zoom to 100%</value>
+    <value>重新设置窗口大小(100%缩放)</value>
   </data>
   <data name="Settings_BrowserControl_Display" xml:space="preserve">
-    <value>(Display)</value>
+    <value>(显示)</value>
   </data>
   <data name="Settings_WindowControl" xml:space="preserve">
-    <value>Window Controls</value>
+    <value>窗口位置</value>
   </data>
   <data name="Settings_WindowControl_LocationLeftButton" xml:space="preserve">
-    <value>Dock window to left of screen.</value>
+    <value>将窗口放在屏幕左端</value>
   </data>
   <data name="Settings_WindowControl_LocationLeftButton_Sub" xml:space="preserve">
-    <value>For use with 8 inch tablets (800x1280)</value>
+    <value>8英寸屏使用(800 x 1280) </value>
   </data>
   <data name="Settings_Proxy" xml:space="preserve">
-    <value>Proxy Settings</value>
+    <value>代理设置</value>
   </data>
   <data name="Settings_Proxy_Host" xml:space="preserve">
-    <value>Host</value>
+    <value>地址</value>
   </data>
   <data name="Settings_Proxy_Port" xml:space="preserve">
-    <value>Port</value>
+    <value>端口</value>
   </data>
   <data name="Settings_Proxy_Enable" xml:space="preserve">
-    <value>Use a proxy to connect the server</value>
+    <value>使用代理来连接服务器</value>
   </data>
   <data name="Settings_Proxy_Enable_4_SSL" xml:space="preserve">
-    <value>Use the proxy for SSL connections</value>
+    <value>使用SSL时也使用代理服务器</value>
   </data>
   <data name="Settings_Display" xml:space="preserve">
-    <value>Display Settings</value>
+    <value>显示设置</value>
   </data>
   <data name="Settings_Network" xml:space="preserve">
-    <value>Network</value>
+    <value>网络设置</value>
   </data>
   <data name="Settings_Operation" xml:space="preserve">
-    <value>Behaviour</value>
+    <value>行为设置</value>
   </data>
   <data name="Settings_Screenshot" xml:space="preserve">
-    <value>Screenshot Settings</value>
+    <value>截图</value>
   </data>
   <data name="Settings_Screenshot_FolderTextBox_Label" xml:space="preserve">
-    <value>Destination</value>
+    <value>截图文件夹</value>
   </data>
   <data name="Settings_Screenshot_FolderTextBox_Prompt" xml:space="preserve">
-    <value>Destination Folder Path</value>
+    <value>截图文件夹路径</value>
   </data>
   <data name="Settings_Window" xml:space="preserve">
-    <value>Window</value>
+    <value>窗口设置</value>
   </data>
   <data name="Settings_Window_TopMost" xml:space="preserve">
-    <value>Keep window on top</value>
+    <value>永远保持在最前端</value>
   </data>
   <data name="Common_Implement_Oncoming" xml:space="preserve">
-    <value>※ To be implemented</value>
+    <value>※近期实现该功能</value>
   </data>
   <data name="Settings_Other" xml:space="preserve">
-    <value>Other</value>
+    <value>其他</value>
   </data>
   <data name="Settings_VersionInfo" xml:space="preserve">
-    <value>Version Info</value>
+    <value>关于</value>
   </data>
   <data name="Settings_Screenshot_ImageFormat_Label" xml:space="preserve">
-    <value>Image Format</value>
+    <value>图片格式</value>
   </data>
   <data name="StatusBar_AirSuperiorityPotential" xml:space="preserve">
-    <value>Air Superiority Potential:</value>
+    <value>对空战斗力:</value>
   </data>
   <data name="StatusBar_AverageLevel" xml:space="preserve">
-    <value>Average Level:</value>
+    <value>平均等级:</value>
   </data>
   <data name="StatusBar_NotStarted" xml:space="preserve">
-    <value>Waiting for KanColle to start</value>
+    <value>等待舰これ载入</value>
   </data>
   <data name="StatusBar_Ready" xml:space="preserve">
-    <value>Ready</value>
+    <value>准备完毕</value>
   </data>
   <data name="StatusBar_Speed_Fast" xml:space="preserve">
-    <value>Fast Fleet</value>
+    <value>高速舰队</value>
   </data>
   <data name="StatusBar_Speed_Slow" xml:space="preserve">
-    <value>Slow Fleet</value>
+    <value>低速舰队</value>
   </data>
   <data name="Screenshot_Failed" xml:space="preserve">
-    <value>Screenshot save failed: </value>
+    <value>截图保存失败: </value>
   </data>
   <data name="Screenshot_Saved" xml:space="preserve">
-    <value>Screenshot saved: </value>
+    <value>截图保存成功: </value>
   </data>
   <data name="Homeport_FleetHQ" xml:space="preserve">
-    <value>Fleet HQ</value>
+    <value>司令部</value>
   </data>
   <data name="Homeport_InstantBuild" xml:space="preserve">
-    <value>Instant Build Materials:  </value>
+    <value>高速建造材料:</value>
   </data>
   <data name="Homeport_InstantRepair" xml:space="preserve">
-    <value>Instant Repair Materials:</value>
+    <value>高速修复材料:</value>
   </data>
   <data name="Homeport_NoOfEquipment" xml:space="preserve">
-    <value>Equipment:</value>
+    <value>所持有的装备:</value>
   </data>
   <data name="Homeport_NoOfShips" xml:space="preserve">
-    <value>Ship Girls:  </value>
+    <value>所持有的舰娘:</value>
   </data>
   <data name="Common_Notifications_Disable" xml:space="preserve">
-    <value>No Notifications</value>
+    <value>不通知</value>
   </data>
   <data name="Common_Notifications_NotImplemented" xml:space="preserve">
-    <value>(planned)</value>
+    <value>(未实现)</value>
   </data>
   <data name="Common_Notifications_Title" xml:space="preserve">
-    <value>Notifications</value>
+    <value>通知设置</value>
   </data>
   <data name="Common_Notifications_Windows8" xml:space="preserve">
-    <value>(Windows 8+)</value>
+    <value>(需要Windows 8 以上的系统)</value>
   </data>
   <data name="Dockyard_Complete" xml:space="preserve">
-    <value>Complete!</value>
+    <value>完成！</value>
   </data>
   <data name="Dockyard_Locked" xml:space="preserve">
-    <value>Locked</value>
+    <value>该建造坞被锁定</value>
   </data>
   <data name="Dockyard_ShipName" xml:space="preserve">
-    <value>Ship In Progress</value>
+    <value>建造中的舰娘</value>
   </data>
   <data name="Dockyard_TimeComplete" xml:space="preserve">
-    <value>Completion Time</value>
+    <value>建造完成时间</value>
   </data>
   <data name="Dockyard_TimeRemaining" xml:space="preserve">
-    <value>Remaining Time</value>
+    <value>距离建造完成还有</value>
   </data>
   <data name="Dockyard_Unused" xml:space="preserve">
-    <value>Empty</value>
+    <value>未使用</value>
   </data>
   <data name="Expedition_NoExpedition" xml:space="preserve">
-    <value>Not on an Expedition.</value>
+    <value>该舰队没有在远征中</value>
   </data>
   <data name="Expedition_Notifications_Enable" xml:space="preserve">
-    <value>Notify Upon Completion</value>
+    <value>舰队远征结束时通知</value>
   </data>
   <data name="Expedition_Notifications_Individual" xml:space="preserve">
-    <value>Individual Fleet Settings</value>
+    <value>仅通知指定的舰队</value>
   </data>
   <data name="Expedition_TimeComplete" xml:space="preserve">
-    <value>Completion Time</value>
+    <value>舰队返回时间</value>
   </data>
   <data name="Expedition_TimeRemaining" xml:space="preserve">
-    <value>Remaining Time</value>
+    <value>距离舰队返回还有</value>
   </data>
   <data name="Repairyard_Locked" xml:space="preserve">
-    <value>Locked</value>
+    <value>该船坞被锁定</value>
   </data>
   <data name="Repairyard_Notifications_Enable" xml:space="preserve">
-    <value>Notify Upon Completion</value>
+    <value>整备完成时提示</value>
   </data>
   <data name="Repairyard_Notifications_Individual" xml:space="preserve">
-    <value>Individual Dock Settings</value>
+    <value>仅通知指定的船坞</value>
   </data>
   <data name="Repairyard_ShipName" xml:space="preserve">
-    <value>Docked Ship</value>
+    <value>在修理渠中的舰娘</value>
   </data>
   <data name="Repairyard_TimeComplete" xml:space="preserve">
-    <value>Completion Time</value>
+    <value>完成时间</value>
   </data>
   <data name="Repairyard_TimeRemaining" xml:space="preserve">
-    <value>Remaining Time</value>
+    <value>剩余时间</value>
   </data>
   <data name="Reparyard_Unused" xml:space="preserve">
-    <value>Empty</value>
+    <value>未使用</value>
   </data>
   <data name="ViewModels_Dockyard" xml:space="preserve">
-    <value>Construction</value>
+    <value>建造</value>
   </data>
   <data name="ViewModels_Expeditions" xml:space="preserve">
-    <value>Expeditions</value>
+    <value>远征</value>
   </data>
   <data name="ViewModels_Fleets" xml:space="preserve">
-    <value>Fleets</value>
+    <value>舰队</value>
   </data>
   <data name="ViewModels_Quests" xml:space="preserve">
-    <value>Quests</value>
+    <value>任务</value>
   </data>
   <data name="ViewModels_Repairyard" xml:space="preserve">
-    <value>Repair</value>
+    <value>入渠</value>
   </data>
   <data name="ViewModels_Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>设置</value>
   </data>
   <data name="Dockyard_Display_Reveal" xml:space="preserve">
-    <value>Reveal Ship Names</value>
+    <value>显示建造中的舰娘名</value>
   </data>
   <data name="Dockyard_Display_Title" xml:space="preserve">
-    <value>Display Settings</value>
+    <value>显示设置</value>
   </data>
   <data name="Dockyard_Notifications_Enable" xml:space="preserve">
-    <value>Notify Upon Completion</value>
+    <value>建造完成时通知</value>
   </data>
   <data name="Dockyard_Notifications_Individual" xml:space="preserve">
-    <value>Individual Dock Settings</value>
+    <value>仅通知指定的建造坞</value>
   </data>
 </root>

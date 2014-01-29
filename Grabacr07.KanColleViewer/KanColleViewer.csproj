@@ -123,9 +123,11 @@
     <Compile Include="Model\Data\Xml\XmlFileWriter.cs" />
     <Compile Include="Model\Data\Xml\XmlSerializableDictionary.cs" />
     <Compile Include="Model\Helper.cs" />
+    <Compile Include="Model\NotifyIconWrapper.cs" />
     <Compile Include="Model\Mode.cs" />
     <Compile Include="Model\StatusService.cs" />
     <Compile Include="Model\Settings.cs" />
+    <Compile Include="Model\SupportedImageFormat.cs" />
     <Compile Include="Model\ThemeService.cs" />
     <Compile Include="Model\Toast.cs" />
     <Compile Include="Model\Volume.cs" />
@@ -185,6 +187,7 @@
     <Compile Include="Views\Contents\Expeditions.xaml.cs">
       <DependentUpon>Expeditions.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Converters\EnumToBooleanConverter.cs" />
     <Compile Include="Views\NotStarted.xaml.cs">
       <DependentUpon>NotStarted.xaml</DependentUpon>
     </Compile>
@@ -332,6 +335,8 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.ja-JP.resx" />
+    <EmbeddedResource Include="Properties\Resources.zh-CN.resx">
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
