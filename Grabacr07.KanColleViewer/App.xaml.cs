@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
-using Grabacr07.KanColleViewer.Model;
+using Grabacr07.KanColleViewer.Models;
 using Grabacr07.KanColleViewer.ViewModels;
 using Grabacr07.KanColleViewer.Views;
 using Grabacr07.KanColleWrapper;
 using Livet;
+using MetroRadiance;
 using AppSettings = Grabacr07.KanColleViewer.Properties.Settings;
-using Settings = Grabacr07.KanColleViewer.Model.Settings;
+using Settings = Grabacr07.KanColleViewer.Models.Settings;
 
 namespace Grabacr07.KanColleViewer
 {
@@ -35,28 +33,21 @@ namespace Grabacr07.KanColleViewer
 			this.DispatcherUnhandledException += (sender, args) => ReportException(sender, args.Exception);
 
 			DispatcherHelper.UIDispatcher = this.Dispatcher;
-			Helper.SetRegistryFeatureBrowserEmulation();
-			KanColleClient.Current.Proxy.Startup(AppSettings.Default.LocalProxyPort);
-			Settings.Load();
-
 			ProductInfo = new ProductInfo();
 
-			var proxy = KanColleClient.Current.Proxy;
-			proxy.UpstreamProxyHost = Settings.Current.ProxyHost;
-			proxy.UpstreamProxyPort = Settings.Current.ProxyPort;
-			proxy.UseProxyOnConnect = Settings.Current.EnableProxy;
-			proxy.UseProxyOnSSLConnect = Settings.Current.EnableSSLProxy;
+			Settings.Load();
+			WindowsNotification.Notifier.Initialize();
+			Helper.SetRegistryFeatureBrowserEmulation();
 
-			if (Toast.IsSupported)
-			{
-				Toast.TryInstallShortcut();
-			}
-			else
-			{
-				NotifyIconWrapper.Initialize();
-			}
+			KanColleClient.Current.Proxy.Startup(AppSettings.Default.LocalProxyPort);
+			KanColleClient.Current.Proxy.UseProxyOnConnect = Settings.Current.EnableProxy;
+			KanColleClient.Current.Proxy.UseProxyOnSSLConnect = Settings.Current.EnableSSLProxy;
+			KanColleClient.Current.Proxy.UpstreamProxyHost = Settings.Current.ProxyHost;
+			KanColleClient.Current.Proxy.UpstreamProxyPort = Settings.Current.ProxyPort;
 
-			ThemeService.Current.Initialize(this);
+			ResourceService.Current.ChangeCulture(Settings.Current.Culture);
+
+			ThemeService.Current.Initialize(this, Theme.Dark, Accent.Purple);
 
 			ViewModelRoot = new MainWindowViewModel();
 			this.MainWindow = new MainWindow { DataContext = ViewModelRoot };
@@ -67,11 +58,9 @@ namespace Grabacr07.KanColleViewer
 		{
 			base.OnExit(e);
 
-			if (!Toast.IsSupported)
-			{
-				NotifyIconWrapper.Dispose();
-			}
 			KanColleClient.Current.Proxy.Shutdown();
+
+			WindowsNotification.Notifier.Dispose();
 			Settings.Current.Save();
 		}
 

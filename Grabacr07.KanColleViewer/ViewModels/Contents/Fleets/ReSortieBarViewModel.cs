@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Grabacr07.KanColleViewer.Model;
+using Grabacr07.KanColleViewer.Models;
+using Grabacr07.KanColleViewer.Properties;
 using Grabacr07.KanColleWrapper;
 using Grabacr07.KanColleWrapper.Models;
 using Livet;
@@ -106,31 +107,16 @@ namespace Grabacr07.KanColleViewer.ViewModels.Contents.Fleets
 			this.UpdateMessage();
 			this.UpdateRemaining();
 
-			if (Toast.IsSupported)
+			reSortie.Readied += (sender, args) =>
 			{
-				reSortie.Readied += (sender, args) =>
+				if (this.IsNotifyReadied)
 				{
-					if (this.IsNotifyReadied)
-					{
-						Toast.Show(
-							"疲労回復完了",
-							"「" + parent.Name + "」の全艦娘の疲労が回復しました。",
-							() => App.ViewModelRoot.Activate());
-					}
-				};
-			}
-			else
-			{
-				reSortie.Readied += (sender, args) =>
-				{
-					if (this.IsNotifyReadied)
-					{
-						NotifyIconWrapper.Show(
-							"疲労回復完了",
-							"「" + parent.Name + "」の全艦娘の疲労が回復しました。");
-					}
-				};
-			}
+					WindowsNotification.Notifier.Show(
+						Resources.ReSortie_NotificationMessage_Title,
+						string.Format(Resources.ReSortie_NotificationMessage, parent.Name),
+						() => App.ViewModelRoot.Activate());
+				}
+			};
 		}
 
 
@@ -138,7 +124,7 @@ namespace Grabacr07.KanColleViewer.ViewModels.Contents.Fleets
 		{
 			if (this.source.CanReSortie)
 			{
-				this.Message = "出撃可能！";
+				this.Message = Properties.Resources.MessageBar_ReSortie_CanReSortie;
 				this.CanReSortie = true;
 				return;
 			}
@@ -147,24 +133,24 @@ namespace Grabacr07.KanColleViewer.ViewModels.Contents.Fleets
 
 			if (this.source.Reason.HasFlag(CanReSortieReason.Wounded))
 			{
-				list.Add("中破以上の艦娘");
+				list.Add(Properties.Resources.MessageBar_ReSortie_Wounded);
 			}
 			if (this.source.Reason.HasFlag(CanReSortieReason.LackForResources))
 			{
-				list.Add("未補給の艦娘");
+				list.Add(Properties.Resources.MessageBar_ReSortie_LackForResources);
 			}
 			if (this.source.Reason.HasFlag(CanReSortieReason.BadCondition))
 			{
-				list.Add("疲労中の艦娘");
+				list.Add(Properties.Resources.MessageBar_ReSortie_BadCondition);
 			}
 
-			this.Message = string.Format("艦隊に{0}がいます。", list.ToString("・"));
+			this.Message = string.Format(Properties.Resources.MessageBar_ReSortie_CanNotReSortie, list.ToString(Properties.Resources.MessageBar_ReSortie_Separator));
 			this.CanReSortie = false;
 		}
 
 		private void UpdateRemaining()
 		{
-			this.Remaining = this.source.Remaining.HasValue ? "再出撃までの目安: " + this.source.Remaining.Value.ToString(@"mm\:ss") : "";
+			this.Remaining = this.source.Remaining.HasValue ? Properties.Resources.MessageBar_ReSortie_Remaining + this.source.Remaining.Value.ToString(@"mm\:ss") : "";
 		}
 	}
 }

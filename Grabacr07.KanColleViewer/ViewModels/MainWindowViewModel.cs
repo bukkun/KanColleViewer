@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using Grabacr07.KanColleViewer.Model;
-using Grabacr07.KanColleViewer.ViewModels.Contents;
+using Grabacr07.KanColleViewer.Models;
 using Grabacr07.KanColleViewer.ViewModels.Messages;
 using Grabacr07.KanColleWrapper;
 using Livet;
 using Livet.EventListeners;
 using Livet.Messaging.Windows;
+using MetroRadiance;
 
 namespace Grabacr07.KanColleViewer.ViewModels
 {
@@ -23,6 +19,7 @@ namespace Grabacr07.KanColleViewer.ViewModels
 		private MainContentViewModel mainContent;
 
 		public NavigatorViewModel Navigator { get; private set; }
+		public SettingsViewModel Settings { get; private set; }
 
 		#region Mode 変更通知プロパティ
 
@@ -35,18 +32,18 @@ namespace Grabacr07.KanColleViewer.ViewModels
 				switch (value)
 				{
 					case Mode.NotStarted:
-						this.Content = NotStartedViewModel.Instance;
+						this.Content = StartContentViewModel.Instance;
 						StatusService.Current.Set(Properties.Resources.StatusBar_NotStarted);
-						ThemeService.Current.Accent = Accent.Purple;
+						ThemeService.Current.ChangeAccent(Accent.Purple);
 						break;
 					case Mode.Started:
 						this.Content = this.mainContent ?? (this.mainContent = new MainContentViewModel());
 						StatusService.Current.Set(Properties.Resources.StatusBar_Ready);
-						ThemeService.Current.Accent = Accent.Blue;
+						ThemeService.Current.ChangeAccent(Accent.Blue);
 						break;
 					case Mode.InSortie:
 						// 今後の実装にご期待ください
-						ThemeService.Current.Accent = Accent.Orange;
+						ThemeService.Current.ChangeAccent(Accent.Orange);
 						break;
 				}
 
@@ -117,12 +114,12 @@ namespace Grabacr07.KanColleViewer.ViewModels
 
 		public bool TopMost
 		{
-			get { return Settings.Current.TopMost; }
+			get { return Models.Settings.Current.TopMost; }
 			set
 			{
-				if (Settings.Current.TopMost != value)
+				if (Models.Settings.Current.TopMost != value)
 				{
-					Settings.Current.TopMost = value;
+					Models.Settings.Current.TopMost = value;
 					this.RaisePropertyChanged();
 				}
 			}
@@ -135,6 +132,7 @@ namespace Grabacr07.KanColleViewer.ViewModels
 		{
 			this.Title = App.ProductInfo.Title;
 			this.Navigator = new NavigatorViewModel();
+			this.Settings = new SettingsViewModel();
 
 			this.CompositeDisposable.Add(new PropertyChangedEventListener(StatusService.Current)
 			{

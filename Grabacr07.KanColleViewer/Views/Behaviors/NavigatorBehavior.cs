@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interactivity;
 using System.Windows.Navigation;
-using Grabacr07.KanColleViewer.Model;
+using Grabacr07.KanColleViewer.Models;
 
 namespace Grabacr07.KanColleViewer.Views.Behaviors
 {
@@ -77,12 +77,18 @@ namespace Grabacr07.KanColleViewer.Views.Behaviors
 
 		private void NavigatorOnGoBackRequested(object sender, EventArgs eventArgs)
 		{
-			this.AssociatedObject.GoBack();
+			if (this.AssociatedObject.CanGoBack)
+			{
+				this.AssociatedObject.GoBack();
+			}
 		}
 
 		private void NavigatorOnGoForwardRequested(object sender, EventArgs eventArgs)
 		{
-			this.AssociatedObject.GoForward();
+			if (this.AssociatedObject.CanGoForward)
+			{
+				this.AssociatedObject.GoForward();
+			}
 		}
 
 		private void NavigatorOnRefreshRequested(object sender, EventArgs eventArgs)

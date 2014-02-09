@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Grabacr07.KanColleViewer.Model;
+using Grabacr07.KanColleViewer.Models;
+using Grabacr07.KanColleViewer.Properties;
 using Grabacr07.KanColleWrapper.Models;
 using Livet;
 using Livet.EventListeners;
@@ -76,85 +77,42 @@ namespace Grabacr07.KanColleViewer.ViewModels.Contents.Fleets
 			this.source = expedition;
 			this.CompositeDisposable.Add(new PropertyChangedEventListener(expedition, (sender, args) => this.RaisePropertyChanged(args.PropertyName)));
 
-			if (Toast.IsSupported)
+			expedition.Returned += (sender, args) =>
 			{
-				expedition.Returned += (sender, args) =>
+				if (this.IsNotifyReturned)
 				{
-					if (this.IsNotifyReturned)
+					WindowsNotification.Notifier.Show(
+						Resources.Expedition_NotificationMessage_Title,
+						string.Format(Resources.Expedition_NotificationMessage, args.FleetName),
+						() => App.ViewModelRoot.Activate());
+
+					var pathStr = Models.Settings.Current.ExpeditionReturnedSoundFile;
+					if (null != pathStr
+						&& string.Empty != pathStr
+						&& System.IO.File.Exists(pathStr))
 					{
-						Toast.Show(
-							"遠征完了",
-							"「" + args.FleetName + "」が遠征から帰投しました。",
-							() => App.ViewModelRoot.Activate());
-
-						var pathStr = Settings.Current.ExpeditionReturnedSoundFile;
-						if (null != pathStr
-							&& string.Empty != pathStr
-							&& System.IO.File.Exists(pathStr))
+						try
 						{
-							try
+							if (null != notifySoundPlayer)
 							{
-								if (null != notifySoundPlayer)
-								{
-									notifySoundPlayer.Stop();
-									notifySoundPlayer.SoundLocation = pathStr;
-								}
-								else
-								{
-									// 新しくインスタンスを生成
-									notifySoundPlayer = new System.Media.SoundPlayer(pathStr);
-								}
-								notifySoundPlayer.Play();
+								notifySoundPlayer.Stop();
+								notifySoundPlayer.SoundLocation = pathStr;
 							}
-							catch (Exception e)
+							else
 							{
-								// !!FIXME!! とりあえず握りつぶし。あとで考える
-								;
+								// 新しくインスタンスを生成
+								notifySoundPlayer = new System.Media.SoundPlayer(pathStr);
 							}
-
+							notifySoundPlayer.Play();
+						}
+						catch (Exception e)
+						{
+							// !!FIXME!! とりあえず握りつぶし。あとで考える
+							;
 						}
 					}
-				};
-			}
-			else
-			{
-				expedition.Returned += (sender, args) =>
-				{
-					if (this.IsNotifyReturned)
-					{
-						NotifyIconWrapper.Show(
-							"遠征完了",
-							"「" + args.FleetName + "」 が遠征から帰投しました。");
-
-						var pathStr = Settings.Current.ExpeditionReturnedSoundFile;
-						if (null != pathStr
-							&& string.Empty != pathStr
-							&& System.IO.File.Exists(pathStr))
-						{
-							try
-							{
-								if (null != notifySoundPlayer)
-								{
-									notifySoundPlayer.Stop();
-									notifySoundPlayer.SoundLocation = pathStr;
-								}
-								else
-								{
-									// 新しくインスタンスを生成
-									notifySoundPlayer = new System.Media.SoundPlayer(pathStr);
-								}
-								notifySoundPlayer.Play();
-							}
-							catch (Exception e)
-							{
-								// !!FIXME!! とりあえず握りつぶし。あとで考える
-								;
-							}
-
-						}
-					}
-				};
-			}
+				}
+			};
 		}
 	}
 }

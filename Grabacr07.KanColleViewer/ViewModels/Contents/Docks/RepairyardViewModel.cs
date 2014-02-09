@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Grabacr07.KanColleViewer.Model;
-using Grabacr07.KanColleViewer.ViewModels.Docks;
+using Grabacr07.KanColleViewer.Models;
 using Grabacr07.KanColleWrapper;
 using Livet;
 using Livet.EventListeners;
@@ -12,6 +11,12 @@ namespace Grabacr07.KanColleViewer.ViewModels.Contents.Docks
 {
 	public class RepairyardViewModel : TabItemViewModel
 	{
+		public override string Name
+		{
+			get { return Properties.Resources.Repairyard; }
+			protected set { throw new NotImplementedException(); }
+		}
+
 		#region Docks 変更通知プロパティ
 
 		private RepairingDockViewModel[] _Docks;
@@ -57,8 +62,6 @@ namespace Grabacr07.KanColleViewer.ViewModels.Contents.Docks
 
 		public RepairyardViewModel()
 		{
-			this.Name = Properties.Resources.ViewModels_Repairyard;
-
 			this.CompositeDisposable.Add(new PropertyChangedEventListener(KanColleClient.Current.Homeport.Repairyard)
 			{
 				{ "Docks", (sender, args) => this.Update() },

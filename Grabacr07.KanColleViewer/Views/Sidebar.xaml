@@ -37,7 +37,7 @@
                    VerticalAlignment="Center"
                    Margin="5,5,5,0" />
 
-        <Grid Grid.Row="2" DataContext="{Binding TabItems[0]}">
+		<Grid Grid.Row="2" DataContext="{Binding Fleets}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
@@ -131,7 +131,7 @@
                    VerticalAlignment="Center"
                    Margin="5,5,5,0" />
 
-        <Grid Grid.Row="4" DataContext="{Binding TabItems[1]}">
+		<Grid Grid.Row="4" DataContext="{Binding Repairyard}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />

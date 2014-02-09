@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Grabacr07.KanColleViewer.Model;
+using Grabacr07.KanColleViewer.Models;
+using Grabacr07.KanColleViewer.Properties;
 using Grabacr07.KanColleWrapper.Models;
 using Livet;
 using Livet.EventListeners;
@@ -85,86 +86,46 @@ namespace Grabacr07.KanColleViewer.ViewModels.Contents.Docks
 		{
 			this.source = source;
 			this.CompositeDisposable.Add(new PropertyChangedEventListener(source, (sender, args) => this.RaisePropertyChanged(args.PropertyName)));
-			this.notifySoundPlayer = null;
-			if (Toast.IsSupported)
-			{
-				source.Completed += (sender, args) =>
-				{
-					if (this.IsNotifyCompleted)
-					{
-						Toast.Show(
-							"建造完了",
-							string.Format("工廠第 {0} ドックでの{1}の建造が完了しました。", this.Id, this.CanDisplayShipName ? "「" + this.Ship + "」" : "艦娘"),
-							() => App.ViewModelRoot.Activate());
-						
-						var pathStr = Settings.Current.BuildingCompleteSoundFile;
-						if (null != pathStr
-							&& string.Empty != pathStr
-							&& System.IO.File.Exists(pathStr))
-						{
-							try
-							{
-								if (null != notifySoundPlayer)
-								{
-									notifySoundPlayer.Stop();
-									notifySoundPlayer.SoundLocation = pathStr;
-								}
-								else
-								{
-									// 新しくインスタンスを生成
-									notifySoundPlayer = new System.Media.SoundPlayer(pathStr);
-								}
-								notifySoundPlayer.Play();
-							}
-							catch (Exception e)
-							{
-								// とりあえず握りつぶし。あとで考える
-								;
-							}
 
+			source.Completed += (sender, args) =>
+			{
+				if (this.IsNotifyCompleted)
+				{
+					WindowsNotification.Notifier.Show(
+						Resources.Dockyard_NotificationMessage_Title,
+						string.Format(
+								Resources.Dockyard_NotificationMessage,
+								this.Id,
+								this.CanDisplayShipName ? this.Ship : Resources.Common_ShipGirl),
+						() => App.ViewModelRoot.Activate());
+
+					var pathStr = Models.Settings.Current.BuildingCompleteSoundFile;
+					if (null != pathStr
+						&& string.Empty != pathStr
+						&& System.IO.File.Exists(pathStr))
+					{
+						try
+						{
+							if (null != notifySoundPlayer)
+							{
+								notifySoundPlayer.Stop();
+								notifySoundPlayer.SoundLocation = pathStr;
+							}
+							else
+							{
+								// 新しくインスタンスを生成
+								notifySoundPlayer = new System.Media.SoundPlayer(pathStr);
+							}
+							notifySoundPlayer.Play();
+						}
+						catch (Exception e)
+						{
+							// とりあえず握りつぶし。あとで考える
+							;
 						}
 					}
-				};
-			}
-			else
-			{
-				source.Completed += (sender, args) =>
-				{
-					if (this.IsNotifyCompleted)
-					{
-						NotifyIconWrapper.Show(
-							"建造完了",
-							string.Format("工廠第 {0} ドックでの{1}の建造が完了しました。", this.Id, this.CanDisplayShipName ? "「" + this.Ship + "」" : "艦娘"));
-						
-						var pathStr = Settings.Current.BuildingCompleteSoundFile;
-						if (null != pathStr
-							&& string.Empty != pathStr
-							&& System.IO.File.Exists(pathStr))
-						{
-							try
-							{
-								if (null != notifySoundPlayer)
-								{
-									notifySoundPlayer.Stop();
-									notifySoundPlayer.SoundLocation = pathStr;
-								}
-								else
-								{
-									// 新しくインスタンスを生成
-									notifySoundPlayer = new System.Media.SoundPlayer(pathStr);
-								}
-								notifySoundPlayer.Play();
-							}
-							catch (Exception e)
-							{
-								// とりあえず握りつぶし。あとで考える
-								;
-							}
-
-						}
-					}
-				};
-			}
+				}
+			};
 		}
 	}
 }

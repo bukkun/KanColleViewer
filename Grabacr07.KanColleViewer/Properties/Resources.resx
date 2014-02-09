@@ -339,22 +339,22 @@
   <data name="Reparyard_Unused" xml:space="preserve">
     <value>Empty</value>
   </data>
-  <data name="ViewModels_Dockyard" xml:space="preserve">
+  <data name="Dockyard" xml:space="preserve">
     <value>Construction</value>
   </data>
-  <data name="ViewModels_Expeditions" xml:space="preserve">
+  <data name="Expedition" xml:space="preserve">
     <value>Expeditions</value>
   </data>
-  <data name="ViewModels_Fleets" xml:space="preserve">
+  <data name="Fleets" xml:space="preserve">
     <value>Fleets</value>
   </data>
-  <data name="ViewModels_Quests" xml:space="preserve">
+  <data name="Quests" xml:space="preserve">
     <value>Quests</value>
   </data>
-  <data name="ViewModels_Repairyard" xml:space="preserve">
+  <data name="Repairyard" xml:space="preserve">
     <value>Repair</value>
   </data>
-  <data name="ViewModels_Settings" xml:space="preserve">
+  <data name="Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
   <data name="Dockyard_Display_Reveal" xml:space="preserve">
@@ -368,5 +368,89 @@
   </data>
   <data name="Dockyard_Notifications_Individual" xml:space="preserve">
     <value>Individual Dock Settings</value>
+  </data>
+  <data name="IntegratedView" xml:space="preserve">
+    <value>Overview</value>
+  </data>
+  <data name="Dockyard_NotificationMessage" xml:space="preserve">
+    <value>Construction of {1} in Dock {0} has been completed.</value>
+  </data>
+  <data name="Dockyard_NotificationMessage_Title" xml:space="preserve">
+    <value>Construction Completed</value>
+  </data>
+  <data name="Common_ShipGirl" xml:space="preserve">
+    <value>Shipgirl</value>
+  </data>
+  <data name="Expedition_NotificationMessage" xml:space="preserve">
+    <value>「{0}」 has returned from an expedition.</value>
+  </data>
+  <data name="Expedition_NotificationMessage_Title" xml:space="preserve">
+    <value>Expedition Completed</value>
+  </data>
+  <data name="Repairyard_NotificationMessage" xml:space="preserve">
+    <value>Repairs on {1} in Dock {0} have been completed.</value>
+  </data>
+  <data name="Repairyard_NotificationMessage_Title" xml:space="preserve">
+    <value>Repairs Completed</value>
+  </data>
+  <data name="ReSortie_NotificationMessage" xml:space="preserve">
+    <value>All ships in 「{0}」 have fully recovered from fatigue.</value>
+  </data>
+  <data name="ReSortie_NotificationMessage_Title" xml:space="preserve">
+    <value>Fatigue Recovery Completed</value>
+  </data>
+  <data name="Settings_Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="MessageBar_Repairing" xml:space="preserve">
+    <value>There are ships in your fleet currently docked for repairs. Completion Time: {0:MM/dd HH\:mm}  Remaining Time: {1}:{2:mm\:ss}</value>
+  </data>
+  <data name="MessageBar_ReSortie_CanNotReSortie" xml:space="preserve">
+    <value>There are ships in your fleet that {0}.</value>
+  </data>
+  <data name="MessageBar_ReSortie_BadCondition" xml:space="preserve">
+    <value>are fatigued</value>
+  </data>
+  <data name="MessageBar_ReSortie_LackForResources" xml:space="preserve">
+    <value>need resupplying</value>
+  </data>
+  <data name="MessageBar_ReSortie_Separator" xml:space="preserve">
+    <value>, </value>
+  </data>
+  <data name="MessageBar_ReSortie_Wounded" xml:space="preserve">
+    <value>are heavily damaged</value>
+  </data>
+  <data name="MessageBar_ReSortie_CanReSortie" xml:space="preserve">
+    <value>Ready to sortie!</value>
+  </data>
+  <data name="MessageBar_ReSortie_Remaining" xml:space="preserve">
+    <value>Time until ready again: </value>
+  </data>
+  <data name="Debug" xml:space="preserve">
+    <value>Debug</value>
+  </data>
+  <data name="Debug_NotificationMessage" xml:space="preserve">
+    <value>This is a test notification.</value>
+  </data>
+  <data name="Debug_NotificationMessage_Title" xml:space="preserve">
+    <value>Test</value>
+  </data>
+  <data name="MessageBar_Expedition" xml:space="preserve">
+    <value>This fleet is on an expedition.</value>
+  </data>
+  <data name="MessageBar_Expedition_TimeCompletion" xml:space="preserve">
+    <value> Completion Time:</value>
+  </data>
+  <data name="MessageBar_Expedition_TimeRemaining" xml:space="preserve">
+    <value> Remaining Time:</value>
+  </data>
+  <data name="MessageBar_Repairing_Null" xml:space="preserve">
+    <value>There are ships in your fleet currently docked for repairs.</value>
+  </data>
+  <data name="StartContent_ClearCacheButton" xml:space="preserve">
+    <value>Clear cache</value>
+  </data>
+  <data name="StartContent_ClearCacheButtonMessage" xml:space="preserve">
+    <value>Browser cache cleared</value>
   </data>
 </root>

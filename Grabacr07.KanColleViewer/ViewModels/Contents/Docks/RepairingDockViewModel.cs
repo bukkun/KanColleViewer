@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Grabacr07.KanColleViewer.Model;
+using Grabacr07.KanColleViewer.Models;
+using Grabacr07.KanColleViewer.Properties;
 using Grabacr07.KanColleWrapper.Models;
 using Livet;
 using Livet.EventListeners;
 using Livet.Messaging.Windows;
 
-namespace Grabacr07.KanColleViewer.ViewModels.Docks
+namespace Grabacr07.KanColleViewer.ViewModels.Contents.Docks
 {
 	public class RepairingDockViewModel : ViewModel
 	{
@@ -22,12 +23,12 @@ namespace Grabacr07.KanColleViewer.ViewModels.Docks
 
 		public string Ship
 		{
-			get { return source.Ship == null ? "----" : source.Ship.Info.Name; }
+			get { return this.source.Ship == null ? "----" : this.source.Ship.Info.Name; }
 		}
 
 		public string CompleteTime
 		{
-			get { return source.CompleteTime.HasValue ? source.CompleteTime.Value.LocalDateTime.ToString("MM/dd HH:mm") : "--/-- --:--:--"; }
+			get { return this.source.CompleteTime.HasValue ? this.source.CompleteTime.Value.LocalDateTime.ToString("MM/dd HH:mm") : "--/-- --:--:--"; }
 		}
 
 		public string Remaining
@@ -71,86 +72,42 @@ namespace Grabacr07.KanColleViewer.ViewModels.Docks
 			this.source = source;
 			this.CompositeDisposable.Add(new PropertyChangedEventListener(source, (sender, args) => this.RaisePropertyChanged(args.PropertyName)));
 
-			if (Toast.IsSupported)
+			source.Completed += (sender, args) =>
 			{
-				source.Completed += (sender, args) =>
+				if (this.IsNotifyCompleted)
 				{
-					if (this.IsNotifyCompleted)
+					WindowsNotification.Notifier.Show(
+						Resources.Repairyard_NotificationMessage_Title,
+						string.Format(Resources.Repairyard_NotificationMessage, this.Id, this.Ship),
+						() => App.ViewModelRoot.Activate());
+
+					var pathStr = Models.Settings.Current.RepairingCompleteSoundFile;
+					if (null != pathStr
+						&& string.Empty != pathStr
+						&& System.IO.File.Exists(pathStr))
 					{
-						Toast.Show(
-							"整備完了",
-							string.Format("入渠第 {0} ドックでの「{1}」の整備が完了しました。", this.Id, this.Ship),
-							() => App.ViewModelRoot.Activate());
-
-						var pathStr = Settings.Current.RepairingCompleteSoundFile;
-						if (null != pathStr
-							&& string.Empty != pathStr
-							&& System.IO.File.Exists(pathStr))
+						try
 						{
-							try
+							if (null != notifySoundPlayer)
 							{
-								if (null != notifySoundPlayer)
-								{
-									notifySoundPlayer.Stop();
-									notifySoundPlayer.SoundLocation = pathStr;
-								}
-								else
-								{
-									// 新しくインスタンスを生成
-									notifySoundPlayer = new System.Media.SoundPlayer(pathStr);
-								}
-								notifySoundPlayer.Play();
+								notifySoundPlayer.Stop();
+								notifySoundPlayer.SoundLocation = pathStr;
 							}
-							catch (Exception e)
+							else
 							{
-								// FIXME とりあえず握りつぶし。あとで考える
-								;
+								// 新しくインスタンスを生成
+								notifySoundPlayer = new System.Media.SoundPlayer(pathStr);
 							}
-
+							notifySoundPlayer.Play();
+						}
+						catch (Exception e)
+						{
+							// FIXME とりあえず握りつぶし。あとで考える
+							;
 						}
 					}
-				};
-			}
-			else
-			{
-				source.Completed += (sender, args) =>
-				{
-					if (this.IsNotifyCompleted)
-					{
-						NotifyIconWrapper.Show(
-							"整備完了",
-							string.Format("入渠第 {0} ドックでの「{1}」の整備が完了しました。", this.Id, this.Ship));
-
-						var pathStr = Settings.Current.RepairingCompleteSoundFile;
-						if (null != pathStr
-							&& string.Empty != pathStr
-							&& System.IO.File.Exists(pathStr))
-						{
-							try
-							{
-								if (null != notifySoundPlayer)
-								{
-									notifySoundPlayer.Stop();
-									notifySoundPlayer.SoundLocation = pathStr;
-								}
-								else
-								{
-									// 新しくインスタンスを生成
-									notifySoundPlayer = new System.Media.SoundPlayer(pathStr);
-								}
-								notifySoundPlayer.Play();
-							}
-							catch (Exception e)
-							{
-								// FIXME とりあえず握りつぶし。あとで考える
-								;
-							}
-
-						}
-					}
-				};
-			}
-
+				}
+			};
 		}
 	}
 }

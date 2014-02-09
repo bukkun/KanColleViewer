@@ -10,6 +10,8 @@
 			 xmlns:vmDocks="clr-namespace:Grabacr07.KanColleViewer.ViewModels.Contents.Docks"
 			 xmlns:vmFleets="clr-namespace:Grabacr07.KanColleViewer.ViewModels.Contents.Fleets"
 			 xmlns:vmContents="clr-namespace:Grabacr07.KanColleViewer.ViewModels.Contents"
+			 xmlns:dev="clr-namespace:Grabacr07.KanColleViewer.ViewModels.Dev"
+			 xmlns:models="clr-namespace:Grabacr07.KanColleViewer.Models"
 			 mc:Ignorable="d"
 			 d:DesignHeight="25"
 			 d:DesignWidth="780">
@@ -32,14 +34,15 @@
 		<ContentControl Grid.Column="1"
 						Content="{Binding Source={x:Static root:App.ViewModelRoot}, Path=StatusBar}">
 			<ContentControl.Resources>
+				<DataTemplate DataType="{x:Type vmContents:OverviewViewModel}" />
 				<DataTemplate DataType="{x:Type vmFleets:FleetsViewModel}">
 					<TextBlock DataContext="{Binding SelectedFleet}"
 							   Foreground="{DynamicResource AccentForegroundBrushKey}">
 						<Run Text="        " />
-						<Run Text="{x:Static properties:Resources.StatusBar_AverageLevel}" />
+						<Run Text="{Binding Resources.StatusBar_AverageLevel, Source={x:Static models:ResourceService.Current}, Mode=OneWay}" />
 						<Run Text="{Binding AverageLevel, Mode=OneWay}" />
 						<Run Text="        " />
-						<Run Text="{x:Static properties:Resources.StatusBar_AirSuperiorityPotential}" />
+						<Run Text="{Binding Resources.StatusBar_AirSuperiorityPotential, Source={x:Static models:ResourceService.Current}, Mode=OneWay}" />
 						<Run Text="{Binding AirSuperiorityPotential, Mode=OneWay}" />
 						<Run Text="        " />
 						<Run Text="{Binding Speed, Mode=OneWay}" />
@@ -50,6 +53,7 @@
 				<DataTemplate DataType="{x:Type vmContents:QuestsViewModel}" />
 				<DataTemplate DataType="{x:Type vmContents:ExpeditionsViewModel}" />
 				<DataTemplate DataType="{x:Type vm:SettingsViewModel}" />
+				<DataTemplate DataType="{x:Type dev:DebugTabViewModel}" />
 			</ContentControl.Resources>
 		</ContentControl>
 	</Grid>
