@@ -44,6 +44,14 @@ namespace Grabacr07.KanColleWrapper.Models
 		}
 
 		/// <summary>
+		/// 艦娘がロックされているかどうかを示す値を取得します。
+		/// </summary>
+		public bool IsLocked
+		{
+			get { return this.RawData.api_locked == 1; }
+		}
+
+		/// <summary>
 		/// 艦娘の現在の累積経験値を取得します。
 		/// </summary>
 		public int Exp
@@ -72,7 +80,7 @@ namespace Grabacr07.KanColleWrapper.Models
 		/// <summary>
 		/// 弾薬を取得します。
 		/// </summary>
-		public LimitedValue Bull { get; private set; } 
+		public LimitedValue Bull { get; private set; }
 
 		/// <summary>
 		/// 火力ステータス値を取得します。
@@ -98,6 +106,14 @@ namespace Grabacr07.KanColleWrapper.Models
 		/// 運のステータス値を取得します。
 		/// </summary>
 		public ModernizableStatus Luck { get; private set; }
+
+		/// <summary>
+		/// 装備によるボーナスを含めた索敵ステータス値を取得します。
+		/// </summary>
+		public int ViewRange
+		{
+			get { return this.RawData.api_sakuteki.Get(0) ?? 0; }
+		}
 
 		/// <summary>
 		/// 火力・雷装・対空・装甲のすべてのステータス値が最大値に達しているかどうかを示す値を取得します。
@@ -148,6 +164,14 @@ namespace Grabacr07.KanColleWrapper.Models
 
 			this.SlotItems = this.RawData.api_slot.Select(id => this.homeport.SlotItems[id]).Where(x => x != null).ToArray();
 			this.OnSlot = this.RawData.api_onslot;
+		}
+
+
+		internal void Charge(int fuel, int bull, int[] onslot)
+		{
+			this.Fuel = this.Fuel.Update(fuel);
+			this.Bull = this.Bull.Update(bull);
+			this.OnSlot = onslot;
 		}
 
 

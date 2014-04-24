@@ -58,6 +58,7 @@ namespace Grabacr07.KanColleWrapper.Models
 
 		/// <summary>
 		/// 艦隊に所属している艦娘 (空いている枠は null) の配列を取得します。
+		/// null を含まない、所属している艦娘のみのコレクションを取得する場合は、<seealso cref="Extensions.GetShips(Fleet)"/> メソッドを使用してください。
 		/// </summary>
 		public Ship[] Ships
 		{
@@ -86,9 +87,28 @@ namespace Grabacr07.KanColleWrapper.Models
 			get { return this._AverageLevel; }
 			private set
 			{
-				if (this._AverageLevel != value)
+				if (!this._AverageLevel.Equals(value))
 				{
 					this._AverageLevel = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
+
+		#endregion
+
+		#region TotalLevel 変更通知プロパティ
+
+		private int _TotalLevel;
+
+		public int TotalLevel
+		{
+			get { return this._TotalLevel; }
+			set
+			{
+				if (this._TotalLevel != value)
+				{
+					this._TotalLevel = value;
 					this.RaisePropertyChanged();
 				}
 			}
@@ -111,6 +131,28 @@ namespace Grabacr07.KanColleWrapper.Models
 				if (this._AirSuperiorityPotential != value)
 				{
 					this._AirSuperiorityPotential = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
+
+		#endregion
+
+		#region TotalViewRange 変更通知プロパティ
+
+		private int _TotalViewRange;
+
+		/// <summary>
+		/// 各艦娘の装備によるボーナスを含めた、艦隊の索敵合計値を取得します。
+		/// </summary>
+		public int TotalViewRange
+		{
+			get { return this._TotalViewRange; }
+			set
+			{
+				if (this._TotalViewRange != value)
+				{
+					this._TotalViewRange = value;
 					this.RaisePropertyChanged();
 				}
 			}
@@ -177,8 +219,10 @@ namespace Grabacr07.KanColleWrapper.Models
 			this.Id = rawData.api_id;
 			this.Name = rawData.api_name;
 			this.Ships = rawData.api_ship.Select(id => this.homeport.Ships[id]).Where(x => x != null).ToArray();
-			this.AverageLevel = this.Ships.HasValue() ? this.Ships.Average(s => s.Level) : 0.0;
+			this.TotalLevel = this.Ships.HasItems() ? this.Ships.Sum(x => x.Level) : 0;
+			this.AverageLevel = this.Ships.HasItems() ? (double)this.TotalLevel / this.Ships.Length : 0.0;
 			this.AirSuperiorityPotential = this.Ships.Sum(s => s.CalcAirSuperiorityPotential());
+			this.TotalViewRange = this.Ships.Sum(s => s.ViewRange);
 			this.Speed = this.Ships.All(s => s.Info.Speed == Speed.Fast) ? Speed.Fast : Speed.Low;
 			this.ReSortie.Update(this.Ships);
 			this.Expedition.Update(rawData.api_mission);
@@ -192,6 +236,13 @@ namespace Grabacr07.KanColleWrapper.Models
 			else if (this.Expedition.IsInExecution) this.State = FleetState.Expedition;
 			else if (this.homeport.Repairyard.CheckRepairing(this)) this.State = FleetState.Repairing;
 			else this.State = FleetState.Ready;
+		}
+
+		internal void UpdateShips()
+		{
+			this.RaisePropertyChanged("Ships");
+			this.ReSortie.Update(this.Ships);
+			this.UpdateStatus();
 		}
 
 		public override string ToString()

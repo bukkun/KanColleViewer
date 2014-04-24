@@ -50,6 +50,16 @@
   <PropertyGroup>
     <ApplicationIcon>Assets\app.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release %28beta%29|AnyCPU'">
+    <OutputPath>bin\Release %28beta%29\</OutputPath>
+    <DefineConstants>TRACE;BETA</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="CoreAudioApi, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -127,7 +137,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\BrowserZoomFactor.cs" />
     <Compile Include="Models\IWindowsNotifier.cs" />
+    <Compile Include="Models\IZoomFactor.cs" />
     <Compile Include="Models\ProductInfo.cs" />
     <Compile Include="Models\Data\Xml\XmlFileReader.cs" />
     <Compile Include="Models\Data\Xml\XmlFileWriter.cs" />
@@ -142,6 +154,8 @@
     <Compile Include="Models\Toast.cs" />
     <Compile Include="Models\Internal\Windows8Notifier.cs" />
     <Compile Include="Models\Volume.cs" />
+    <Compile Include="ViewModels\Catalogs\ShipCatalogFilter.cs" />
+    <Compile Include="ViewModels\Catalogs\ShipViewModel.cs" />
     <Compile Include="ViewModels\Catalogs\SlotItemCatalogViewModel.cs" />
     <Compile Include="ViewModels\Catalogs\SlotItemViewModel.cs" />
     <Compile Include="ViewModels\Catalogs\SortableColumnViewModel.cs" />
@@ -176,14 +190,16 @@
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\Contents\ShipsViewModel.cs" />
     <Compile Include="ViewModels\Contents\SlotItemsViewModel.cs" />
-    <Compile Include="ViewModels\StatusBarItemViewModel.cs" />
     <Compile Include="ViewModels\StatusBarViewModel.cs" />
     <Compile Include="ViewModels\TabItemViewModel.cs" />
     <Compile Include="ViewModels\VolumeViewModel.cs" />
+    <Compile Include="Views\Behaviors\FlickFleetsAction.cs" />
+    <Compile Include="Views\Behaviors\FlickTrigger.cs" />
     <Compile Include="Views\Behaviors\NavigatorBehavior.cs" />
     <Compile Include="Views\Behaviors\ScreenshotAction.cs" />
     <Compile Include="Views\Behaviors\SetStyleSheetBehavior.cs" />
     <Compile Include="Views\Behaviors\SetWindowLocationAction.cs" />
+    <Compile Include="Views\Controls\KanColleHost.cs" />
     <Compile Include="Views\Controls\WebBrowserHelper.cs" />
     <Compile Include="Views\Behaviors\ZoomAction.cs" />
     <Compile Include="Views\BrowserNavigator.xaml.cs">
@@ -209,8 +225,6 @@
     <Compile Include="Views\Contents\QuestViewSource.cs" />
     <Compile Include="Views\Controls\AppIcon.cs" />
     <Compile Include="Views\Controls\BuildingDock.cs" />
-    <Compile Include="Views\Controls\MuteButton.cs" />
-    <Compile Include="Views\Controls\NavigationButton.cs" />
     <Compile Include="Views\Controls\Quest.cs" />
     <Compile Include="Views\Controls\SlotItemIcon.cs" />
     <Compile Include="Views\Contents\Dockyard.xaml.cs">
@@ -218,6 +232,9 @@
     </Compile>
     <Compile Include="Views\Contents\Expeditions.xaml.cs">
       <DependentUpon>Expeditions.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Controls\ZoomFactorSelector.xaml.cs">
+      <DependentUpon>ZoomFactorSelector.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Converters\QuestCategoryToColorConverter.cs" />
     <Compile Include="Views\Dev\DebugTab.xaml.cs">
@@ -263,6 +280,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Styles\Controls.HorizontalFlatListBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <DependentUpon>Controls.xaml</DependentUpon>
+    </Page>
     <Page Include="Styles\Controls.ListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -306,17 +328,12 @@
       <Generator>MSBuild:Compile</Generator>
       <DependentUpon>Generic.xaml</DependentUpon>
     </Page>
+    <Page Include="Themes\Generic.KanColleHost.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <DependentUpon>Generic.xaml</DependentUpon>
+    </Page>
     <Page Include="Themes\Generic.Modernizable.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <DependentUpon>Generic.xaml</DependentUpon>
-    </Page>
-    <Page Include="Themes\Generic.MuteButton.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <DependentUpon>Generic.xaml</DependentUpon>
-    </Page>
-    <Page Include="Themes\Generic.NavigationButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <DependentUpon>Generic.xaml</DependentUpon>
@@ -360,6 +377,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Contents\Quests.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Controls\ZoomFactorSelector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -415,7 +436,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Fleets.xaml">
+    <Page Include="Views\Contents\Fleets.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -444,7 +465,7 @@
     <Compile Include="Views\Behaviors\TimerBehavior.cs" />
     <Compile Include="Views\Controls\ColorIndicator.cs" />
     <Compile Include="Views\Controls\ConditionIcon.cs" />
-    <Compile Include="Views\Fleets.xaml.cs">
+    <Compile Include="Views\Contents\Fleets.xaml.cs">
       <DependentUpon>Fleets.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainContent.xaml.cs">
@@ -469,13 +490,19 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Properties\Resources.en.resx">
+      <DependentUpon>Resources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.ko-KR.resx">
+      <DependentUpon>Resources.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.ja-JP.resx" />
     <EmbeddedResource Include="Properties\Resources.zh-CN.resx">
+      <DependentUpon>Resources.resx</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

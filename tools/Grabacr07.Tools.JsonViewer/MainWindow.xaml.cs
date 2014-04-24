@@ -12,22 +12,25 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Codeplex.Data;
 
-namespace Grabacr07.KanColleViewer.Views
+namespace Grabacr07.Tools.JsonViewer
 {
-	/// <summary>
-	/// Fleets.xaml の相互作用ロジック
-	/// </summary>
-	public partial class Fleets : UserControl
+	partial class MainWindow
 	{
-		public Fleets()
+		public MainWindow()
 		{
 			InitializeComponent();
 		}
 
-		private void Button_Click(object sender, RoutedEventArgs e)
+		private void Parse(object sender, RoutedEventArgs e)
 		{
-
+			var target = this.TextBox.Text;
+			if (!string.IsNullOrEmpty(target))
+			{
+				var obj = DynamicJson.Parse(target);
+			}
+			// ↖ ここにブレークポイントを仕掛けよう
 		}
 	}
 }
