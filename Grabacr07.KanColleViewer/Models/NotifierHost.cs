@@ -72,7 +72,7 @@ namespace Grabacr07.KanColleViewer.Models
 							string.Format(Resources.Repairyard_NotificationMessage, args.DockId, args.Ship.Info.Name),
 							() => App.ViewModelRoot.Activate());
 
-						var pathStr = Models.Settings.Current.ExpeditionReturnedSoundFile;
+						var pathStr = Models.Settings.Current.RepairingCompleteSoundFile;
 						PlayNotiySound(pathStr);
 
 					}
@@ -119,7 +119,7 @@ namespace Grabacr07.KanColleViewer.Models
 							string.Format(Resources.Expedition_NotificationMessage, args.FleetName),
 							() => App.ViewModelRoot.Activate());
 
-						var pathStr = Models.Settings.Current.RepairingCompleteSoundFile;
+						var pathStr = Models.Settings.Current.ExpeditionReturnedSoundFile;
 						PlayNotiySound(pathStr);
 					}
 				};
