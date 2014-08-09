@@ -22,6 +22,10 @@ namespace Grabacr07.KanColleViewer.Models
 
 		#endregion
 
+		#region notify sound player
+		private static System.Media.SoundPlayer _notifySoundPlayer;
+		#endregion
+
 		private NotifierHost() { }
 
 		public void Initialize(KanColleClient client)
@@ -67,6 +71,10 @@ namespace Grabacr07.KanColleViewer.Models
 							Resources.Repairyard_NotificationMessage_Title,
 							string.Format(Resources.Repairyard_NotificationMessage, args.DockId, args.Ship.Info.Name),
 							() => App.ViewModelRoot.Activate());
+
+						var pathStr = Models.Settings.Current.ExpeditionReturnedSoundFile;
+						PlayNotiySound(pathStr);
+
 					}
 				};
 			}
@@ -89,6 +97,9 @@ namespace Grabacr07.KanColleViewer.Models
 							Resources.Dockyard_NotificationMessage_Title,
 							string.Format(Resources.Dockyard_NotificationMessage, args.DockId, shipName),
 							() => App.ViewModelRoot.Activate());
+
+						var pathStr = Models.Settings.Current.BuildingCompleteSoundFile;
+						PlayNotiySound(pathStr);
 					}
 				};
 			}
@@ -107,6 +118,9 @@ namespace Grabacr07.KanColleViewer.Models
 							Resources.Expedition_NotificationMessage_Title,
 							string.Format(Resources.Expedition_NotificationMessage, args.FleetName),
 							() => App.ViewModelRoot.Activate());
+
+						var pathStr = Models.Settings.Current.RepairingCompleteSoundFile;
+						PlayNotiySound(pathStr);
 					}
 				};
 
@@ -122,6 +136,36 @@ namespace Grabacr07.KanColleViewer.Models
 					}
 				};
 			}
+		}
+
+		private static void PlayNotiySound(string pathStr)
+		{
+
+			if (null != pathStr
+				&& string.Empty != pathStr
+				&& System.IO.File.Exists(pathStr))
+			{
+				try
+				{
+					if (null != _notifySoundPlayer)
+					{
+						_notifySoundPlayer.Stop();
+						_notifySoundPlayer.SoundLocation = pathStr;
+					}
+					else
+					{
+						// 新しくインスタンスを生成
+						_notifySoundPlayer = new System.Media.SoundPlayer(pathStr);
+					}
+					_notifySoundPlayer.Play();
+				}
+				catch (Exception e)
+				{
+					// !!FIXME!! とりあえず握りつぶし。あとで考える
+					;
+				}
+			}
+			return;
 		}
 	}
 }
