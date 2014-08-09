@@ -13,11 +13,11 @@ namespace Grabacr07.KanColleWrapper.Models.Raw
 		public kcsapi_mst_slotitem[] api_mst_slotitem { get; set; }
 		public kcsapi_mst_useitem[] api_mst_useitem { get; set; }
 		public kcsapi_mst_stype[] api_mst_stype { get; set; }
+		public kcsapi_mst_slotitem_equiptype[] api_mst_slotitem_equiptype { get; set; }
 
 		// ↓ とりあえずそのまま。
 
 		public Api_Mst_Shipgraph[] api_mst_shipgraph { get; set; }
-		public Api_Mst_Slotitem_Equiptype[] api_mst_slotitem_equiptype { get; set; }
 		public Api_Mst_Slotitemgraph[] api_mst_slotitemgraph { get; set; }
 		public Api_Mst_Furniture[] api_mst_furniture { get; set; }
 		public Api_Mst_Furnituregraph[] api_mst_furnituregraph { get; set; }
@@ -27,7 +27,7 @@ namespace Grabacr07.KanColleWrapper.Models.Raw
 		public Api_Mst_Mapinfo[] api_mst_mapinfo { get; set; }
 		public Api_Mst_Mapbgm[] api_mst_mapbgm { get; set; }
 		public Api_Mst_Mapcell[] api_mst_mapcell { get; set; }
-		public Api_Mst_Mission[] api_mst_mission { get; set; }
+		public kcsapi_mission[] api_mst_mission { get; set; }
 		public Api_Mst_Const api_mst_const { get; set; }
 		public Api_Mst_Shipupgrade[] api_mst_shipupgrade { get; set; }
 	}
@@ -128,13 +128,6 @@ namespace Grabacr07.KanColleWrapper.Models.Raw
 		public int[] api_battle_d { get; set; }
 		public int[] api_weda { get; set; }
 		public int[] api_wedb { get; set; }
-	}
-
-	public class Api_Mst_Slotitem_Equiptype
-	{
-		public int api_id { get; set; }
-		public string api_name { get; set; }
-		public int api_show_flg { get; set; }
 	}
 
 	public class Api_Mst_Stype
@@ -299,20 +292,6 @@ namespace Grabacr07.KanColleWrapper.Models.Raw
 		public int api_id { get; set; }
 		public int api_no { get; set; }
 		public int api_color_no { get; set; }
-	}
-
-	public class Api_Mst_Mission
-	{
-		public int api_id { get; set; }
-		public int api_maparea_id { get; set; }
-		public string api_name { get; set; }
-		public string api_details { get; set; }
-		public int api_time { get; set; }
-		public int api_difficulty { get; set; }
-		public float api_use_fuel { get; set; }
-		public float api_use_bull { get; set; }
-		public int[] api_win_item1 { get; set; }
-		public int[] api_win_item2 { get; set; }
 	}
 
 	public class Api_Mst_Shipupgrade

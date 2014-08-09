@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Grabacr07.KanColleViewer.Properties;
-using Grabacr07.KanColleWrapper;
 using Grabacr07.KanColleWrapper.Models;
 using Livet;
 using Livet.EventListeners;
@@ -17,8 +16,64 @@ namespace Grabacr07.KanColleViewer.ViewModels.Contents.Fleets
 	{
 		private readonly Fleet source;
 
-		public ReSortieBarViewModel ReSortie { get; private set; }
+		public SortieViewModel Sortie { get; private set; }
+
 		public ExpeditionViewModel Expedition { get; private set; }
+
+		public HomeportViewModel Homeport { get; private set; }
+
+		/// <summary>
+		/// 艦隊に所属している艦娘のコレクションを取得します。
+		/// </summary>
+		public ShipViewModel[] Ships
+		{
+			get { return this.source.Ships.Select(x => new ShipViewModel(x)).ToArray(); }
+		}
+
+		/// <summary>
+		/// 艦隊の状態を取得します。
+		/// </summary>
+		public ViewModel State
+		{
+			get
+			{
+				switch (this.source.State)
+				{
+					case FleetState.Empty:
+						return NullViewModel.Instance;
+
+					case FleetState.Sortie:
+						return this.Sortie;
+
+					case FleetState.Expedition:
+						return this.Expedition;
+
+					default:
+						return this.Homeport;
+				}
+			}
+		}
+
+		#region IsSelected 変更通知プロパティ
+
+		private bool _IsSelected;
+
+		public bool IsSelected
+		{
+			get { return this._IsSelected; }
+			set
+			{
+				if (this._IsSelected != value)
+				{
+					this._IsSelected = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
+
+		#endregion
+
+		#region wrapper properties
 
 		public int Id
 		{
@@ -55,71 +110,6 @@ namespace Grabacr07.KanColleViewer.ViewModels.Contents.Fleets
 			get { return this.source.TotalViewRange.ToString("####"); }
 		}
 
-		/// <summary>
-		/// 艦隊に所属している艦娘のコレクションを取得します。
-		/// </summary>
-		public ShipViewModel[] Ships
-		{
-			get { return this.source.GetShips().Select(x => new ShipViewModel(x)).ToArray(); }
-		}
-
-		/// <summary>
-		/// 艦隊に所属している艦娘が装備している艦載機を集計したコレクションを取得します。
-		/// </summary>
-		public IEnumerable<PlaneViewModel> Planes
-		{
-			get
-			{
-				return this.source.Ships
-					.SelectMany(x => x.SlotItems
-						.Where(y => y.Info.IsAircraft || y.Info.IsSeaplane)
-						.Select((y, i) => new { Item = y.Info, Count = x.OnSlot[i] }))
-					.GroupBy(x => x.Item.Id, x => x)
-					.Select(x => new { x.First().Item, Count = x.Aggregate(0, (i, y) => i + y.Count) })
-					.Select(x => new PlaneViewModel(x.Item, x.Count));
-			}
-		}
-
-		/// <summary>
-		/// 艦隊の状態を取得します。
-		/// </summary>
-		public ViewModel State
-		{
-			get
-			{
-				if (this.source.Ships.Length == 0)
-				{
-					return null;
-				}
-				if (this.source.State == FleetState.Expedition)
-				{
-					return this.Expedition;
-				}
-				if (this.source.State == FleetState.Repairing)
-				{
-					return new RepairingBarViewModel(source);
-				}
-				return this.ReSortie;
-			}
-		}
-
-		#region IsSelected 変更通知プロパティ
-
-		private bool _IsSelected;
-
-		public bool IsSelected
-		{
-			get { return this._IsSelected; }
-			set
-			{
-				if (this._IsSelected != value)
-				{
-					this._IsSelected = value;
-					this.RaisePropertyChanged();
-				}
-			}
-		}
-
 		#endregion
 
 
@@ -133,11 +123,14 @@ namespace Grabacr07.KanColleViewer.ViewModels.Contents.Fleets
 				{ () => fleet.Ships, (sender, args) => this.RaisePropertyChanged("Planes") },
 			});
 
-			this.ReSortie = new ReSortieBarViewModel(this, fleet.ReSortie);
-			this.CompositeDisposable.Add(this.ReSortie);
+			this.Sortie = new SortieViewModel(fleet);
+			this.CompositeDisposable.Add(this.Sortie);
 
 			this.Expedition = new ExpeditionViewModel(fleet.Expedition);
 			this.CompositeDisposable.Add(this.Expedition);
+
+			this.Homeport = new HomeportViewModel(fleet);
+			this.CompositeDisposable.Add(this.Homeport);
 		}
 	}
 }

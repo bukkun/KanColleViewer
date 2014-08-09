@@ -26,6 +26,7 @@ namespace Grabacr07.KanColleViewer.ViewModels.Catalogs
 		public ShipModernizeFilter ShipModernizeFilter { get; private set; }
 		public ShipRemodelingFilter ShipRemodelingFilter { get; private set; }
 		public ShipExpeditionFilter ShipExpeditionFilter { get; private set; }
+		public ShipSallyAreaFilter ShipSallyAreaFilter { get; private set; }
 
 		public bool CheckAllShipTypes
 		{
@@ -101,6 +102,7 @@ namespace Grabacr07.KanColleViewer.ViewModels.Catalogs
 			this.IsOpenSettings = true;
 
 			this.SortWorker = new ShipCatalogSortWorker();
+			this.SortWorker.SetTarget(ShipCatalogSortTarget.Level, true);
 
 			this.ShipTypes = KanColleClient.Current.Master.ShipTypes
 				.Select(kvp => new ShipTypeViewModel(kvp.Value)
@@ -116,6 +118,7 @@ namespace Grabacr07.KanColleViewer.ViewModels.Catalogs
 			this.ShipModernizeFilter = new ShipModernizeFilter(this.Update);
 			this.ShipRemodelingFilter = new ShipRemodelingFilter(this.Update);
 			this.ShipExpeditionFilter = new ShipExpeditionFilter(this.Update);
+			this.ShipSallyAreaFilter = new ShipSallyAreaFilter(this.Update);
 
 			this.updateSource
 				.Do(_ => this.IsReloading = true)
@@ -124,9 +127,9 @@ namespace Grabacr07.KanColleViewer.ViewModels.Catalogs
 				.Subscribe(_ => this.IsReloading = false);
 			this.CompositeDisposable.Add(this.updateSource);
 
-			this.CompositeDisposable.Add(new PropertyChangedEventListener(this.homeport)
+			this.CompositeDisposable.Add(new PropertyChangedEventListener(this.homeport.Organization)
 			{
-				{ () => this.homeport.Ships, (sender, args) => this.Update() },
+				{ "Ships", (sender, args) => this.Update() },
 			});
 
 			this.Update();
@@ -135,7 +138,7 @@ namespace Grabacr07.KanColleViewer.ViewModels.Catalogs
 
 		public void Update()
 		{
-			this.ShipExpeditionFilter.SetFleets(this.homeport.Fleets);
+			this.ShipExpeditionFilter.SetFleets(this.homeport.Organization.Fleets);
 
 			this.RaisePropertyChanged("CheckAllShipTypes");
 			this.updateSource.OnNext(Unit.Default);
@@ -154,14 +157,16 @@ namespace Grabacr07.KanColleViewer.ViewModels.Catalogs
 
 		private void UpdateCore()
 		{
-			var list = this.homeport.Ships.Values
+			var list = this.homeport.Organization.Ships
+				.Select(kvp => kvp.Value)
 				.Where(x => this.ShipTypes.Where(t => t.IsSelected).Any(t => x.Info.ShipType.Id == t.Id))
 				.Where(this.ShipLevelFilter.Predicate)
 				.Where(this.ShipLockFilter.Predicate)
 				.Where(this.ShipSpeedFilter.Predicate)
 				.Where(this.ShipModernizeFilter.Predicate)
 				.Where(this.ShipRemodelingFilter.Predicate)
-				.Where(this.ShipExpeditionFilter.Predicate);
+				.Where(this.ShipExpeditionFilter.Predicate)
+				.Where(this.ShipSallyAreaFilter.Predicate);
 
 			this.Ships = this.SortWorker.Sort(list)
 				.Select((x, i) => new ShipViewModel(i + 1, x))

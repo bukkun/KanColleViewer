@@ -3,18 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Documents;
+using Grabacr07.KanColleViewer.Composition;
 using Grabacr07.KanColleViewer.Models;
 using Grabacr07.KanColleViewer.Properties;
+using Grabacr07.KanColleViewer.ViewModels.Composition;
 using Grabacr07.KanColleViewer.ViewModels.Messages;
 using Grabacr07.KanColleWrapper;
-using Livet;
 using Livet.EventListeners;
 using Livet.Messaging;
 using Livet.Messaging.IO;
@@ -23,7 +20,7 @@ using Settings = Grabacr07.KanColleViewer.Models.Settings;
 
 namespace Grabacr07.KanColleViewer.ViewModels
 {
-	public class SettingsViewModel : TabItemViewModel, INotifyDataErrorInfo
+	public class SettingsViewModel : TabItemViewModel
 	{
 		public override string Name
 		{
@@ -68,111 +65,6 @@ namespace Grabacr07.KanColleViewer.ViewModels
 				if (Settings.Current.ScreenshotImageFormat != value)
 				{
 					Settings.Current.ScreenshotImageFormat = value;
-					this.RaisePropertyChanged();
-				}
-			}
-		}
-
-		#endregion
-
-		#region UseProxy 変更通知プロパティ
-
-		public string UseProxy
-		{
-			get { return Settings.Current.EnableProxy.ToString(); }
-			set
-			{
-				bool booleanValue;
-				if (Boolean.TryParse(value, out booleanValue))
-				{
-					Settings.Current.EnableProxy = booleanValue;
-					KanColleClient.Current.Proxy.UseProxyOnConnect = booleanValue;
-					this.RaisePropertyChanged();
-				}
-			}
-		}
-
-		#endregion
-
-		#region UseProxyForSSL 変更通知プロパティ
-
-		public bool UseProxyForSSL
-		{
-			get { return Settings.Current.EnableSSLProxy; }
-			set
-			{
-				if (Settings.Current.EnableSSLProxy != value)
-				{
-					Settings.Current.EnableSSLProxy = value;
-					KanColleClient.Current.Proxy.UseProxyOnSSLConnect = value;
-					this.RaisePropertyChanged();
-				}
-			}
-		}
-
-		#endregion
-
-		#region ProxyHost 変更通知プロパティ
-
-		public string ProxyHost
-		{
-			get { return Settings.Current.ProxyHost; }
-			set
-			{
-				if (Settings.Current.ProxyHost != value)
-				{
-					Settings.Current.ProxyHost = value;
-					KanColleClient.Current.Proxy.UpstreamProxyHost = value;
-					this.RaisePropertyChanged();
-				}
-			}
-		}
-
-		#endregion
-
-		#region ProxyPort 変更通知プロパティ
-
-		public string ProxyPort
-		{
-			get { return Settings.Current.ProxyPort.ToString(); }
-			set
-			{
-				UInt16 numberPort;
-				if (UInt16.TryParse(value, out numberPort))
-				{
-					Settings.Current.ProxyPort = numberPort;
-					KanColleClient.Current.Proxy.UpstreamProxyPort = numberPort;
-					this.RaisePropertyChanged();
-				}
-			}
-		}
-
-		#endregion
-
-		#region ReSortieCondition 変更通知プロパティ
-
-		private string _ReSortieCondition = Settings.Current.ReSortieCondition.ToString(CultureInfo.InvariantCulture);
-		private string reSortieConditionError;
-
-		public string ReSortieCondition
-		{
-			get { return this._ReSortieCondition; }
-			set
-			{
-				if (this._ReSortieCondition != value)
-				{
-					ushort cond;
-					if (ushort.TryParse(value, out cond) && cond <= 49)
-					{
-						Settings.Current.ReSortieCondition = cond;
-						this.reSortieConditionError = null;
-					}
-					else
-					{
-						this.reSortieConditionError = "コンディション値は 0 ～ 49 の数値で入力してください。";
-					}
-
-					this._ReSortieCondition = value;
 					this.RaisePropertyChanged();
 				}
 			}
@@ -301,13 +193,52 @@ namespace Grabacr07.KanColleViewer.ViewModels
 
 		public bool EnableLogging
 		{
-			get { return Settings.Current.EnableLogging; }
+			get { return Settings.Current.KanColleClientSettings.EnableLogging; }
 			set
 			{
-				if (Settings.Current.EnableLogging != value)
+				if (Settings.Current.KanColleClientSettings.EnableLogging != value)
 				{
-					Settings.Current.EnableLogging = value;
+					Settings.Current.KanColleClientSettings.EnableLogging = value;
 					KanColleClient.Current.Homeport.Logger.EnableLogging = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
+
+		#endregion
+
+
+		#region NotifierPlugins 変更通知プロパティ
+
+		private List<NotifierViewModel> _NotifierPlugins;
+
+		public List<NotifierViewModel> NotifierPlugins
+		{
+			get { return this._NotifierPlugins; }
+			set
+			{
+				if (this._NotifierPlugins != value)
+				{
+					this._NotifierPlugins = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
+
+		#endregion
+
+		#region ToolPlugins 変更通知プロパティ
+
+		private List<ToolViewModel> _ToolPlugins;
+
+		public List<ToolViewModel> ToolPlugins
+		{
+			get { return this._ToolPlugins; }
+			set
+			{
+				if (this._ToolPlugins != value)
+				{
+					this._ToolPlugins = value;
 					this.RaisePropertyChanged();
 				}
 			}
@@ -336,14 +267,6 @@ namespace Grabacr07.KanColleViewer.ViewModels
 		}
 
 		#endregion
-
-		public bool HasErrors
-		{
-			get { return this.reSortieConditionError != null; }
-		}
-
-		public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
-
 
 		public SettingsViewModel()
 		{
@@ -379,6 +302,8 @@ namespace Grabacr07.KanColleViewer.ViewModels
 				{ "Current", (sender, args) => Settings.Current.BrowserZoomFactor = zoomFactor.Current },
 			});
 			this.BrowserZoomFactor = zoomFactor;
+
+			this.ReloadPlugins();
 		}
 
 
@@ -428,29 +353,10 @@ namespace Grabacr07.KanColleViewer.ViewModels
 		}
 
 
-		public IEnumerable GetErrors(string propertyName)
+		public void ReloadPlugins()
 		{
-			var errors = new List<string>();
-
-			switch (propertyName)
-			{
-				case "ReSortieCondition":
-					if (this.reSortieConditionError != null)
-					{
-						errors.Add(this.reSortieConditionError);
-					}
-					break;
-			}
-
-			return errors.HasItems() ? errors : null;
-		}
-
-		protected void RaiseErrorsChanged([CallerMemberName]string propertyName = "")
-		{
-			if (this.ErrorsChanged != null)
-			{
-				this.ErrorsChanged(this, new DataErrorsChangedEventArgs(propertyName));
-			}
+			this.NotifierPlugins = new List<NotifierViewModel>(PluginHost.Instance.Notifiers.Select(x => new NotifierViewModel(x)));
+			this.ToolPlugins = new List<ToolViewModel>(PluginHost.Instance.Tools.Select(x => new ToolViewModel(x)));
 		}
 	}
 }

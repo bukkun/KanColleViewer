@@ -10,32 +10,10 @@ namespace Grabacr07.KanColleWrapper.Models
 	/// <summary>
 	/// 遠征を表します。
 	/// </summary>
-	public class Expedition : TimerNotificator, IIdentifiable
+	public class Expedition : TimerNotifier, IIdentifiable
 	{
 		private readonly Fleet fleet;
 		private bool notificated;
-
-		#region IsInExecution 変更通知プロパティ
-
-		private bool _IsInExecution;
-
-		/// <summary>
-		/// 現在遠征を実行中かどうかを示す値を取得します。
-		/// </summary>
-		public bool IsInExecution
-		{
-			get { return this._IsInExecution; }
-			private set
-			{
-				if (this._IsInExecution != value)
-				{
-					this._IsInExecution = value;
-					this.RaisePropertyChanged();
-				}
-			}
-		}
-
-		#endregion
 
 		#region Id 変更通知プロパティ
 
@@ -56,7 +34,29 @@ namespace Grabacr07.KanColleWrapper.Models
 
 		#endregion
 
-		#region ReturnTime 変更通知プロパティ
+		#region Mission 変更通知プロパティ
+
+		private Mission _Mission;
+
+		/// <summary>
+		/// 実行中の遠征任務を取得します。
+		/// </summary>
+		public Mission Mission
+		{
+			get { return this._Mission; }
+			private set
+			{
+				if (this._Mission != value)
+				{
+					this._Mission = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
+
+		#endregion
+
+		#region ReturnTime / IsInExecution 変更通知プロパティ
 
 		private DateTimeOffset? _ReturnTime;
 
@@ -70,9 +70,20 @@ namespace Grabacr07.KanColleWrapper.Models
 					this._ReturnTime = value;
 					this.notificated = false;
 					this.RaisePropertyChanged();
+					this.RaisePropertyChanged("IsInExecution");
 				}
 			}
 		}
+
+
+		/// <summary>
+		/// 現在遠征を実行中かどうかを示す値を取得します。
+		/// </summary>
+		public bool IsInExecution
+		{
+			get { return this.ReturnTime.HasValue; }
+		}
+
 
 		#endregion
 
@@ -128,7 +139,8 @@ namespace Grabacr07.KanColleWrapper.Models
 		{
 			if (rawData.Length != 4 || rawData.All(x => x == 0))
 			{
-				this.IsInExecution = false;
+				this.Id = -1;
+				this.Mission = null;
 				this.ReturnTime = null;
 				this.Remaining = null;
 				this.Name = null;
@@ -136,9 +148,9 @@ namespace Grabacr07.KanColleWrapper.Models
 			else
 			{
 				this.Id = (int)rawData[1];
+				this.Mission = KanColleClient.Current.Master.Missions[this.Id];
 				this.ReturnTime = Definitions.UnixEpoch.AddMilliseconds(rawData[2]);
-				this.IsInExecution = true;
-				this.Name = ExpeditionNameDic.ContainsKey(this.Id) ? ExpeditionNameDic[this.Id] : unknownName;
+				this.Name = this.Mission.Title;
 				this.UpdateCore();
 			}
 		}
@@ -147,12 +159,14 @@ namespace Grabacr07.KanColleWrapper.Models
 		{
 			if (this.ReturnTime.HasValue)
 			{
-				var remaining = this.ReturnTime.Value - TimeSpan.FromMinutes(1.0) - DateTimeOffset.Now;
+				var remaining = this.ReturnTime.Value - DateTimeOffset.Now;
 				if (remaining.Ticks < 0) remaining = TimeSpan.Zero;
 
 				this.Remaining = remaining;
 
-				if (!this.notificated && this.Returned != null && remaining.Ticks <= 0)
+				if (!this.notificated
+					&& this.Returned != null
+					&& remaining <= TimeSpan.FromSeconds(KanColleClient.Current.Settings.NotificationShorteningTime))
 				{
 					this.Returned(this, new ExpeditionReturnedEventArgs(this.fleet.Name));
 					this.notificated = true;
@@ -169,48 +183,5 @@ namespace Grabacr07.KanColleWrapper.Models
 			base.Tick();
 			this.UpdateCore();
 		}
-		const string unknownName = "Unknown";
-		protected Dictionary<int, string> ExpeditionNameDic = new Dictionary<int, string>() 
-        { 
-			{1,"練習航海"},
-			{2,"長距離練習航海"},
-			{3,"警備任務"},
-			{4,"対潜警戒任務"},
-			{5,"海上護衛任務"},
-			{6,"防空射撃演習"},
-			{7,"観艦式予行"},
-			{8,"観艦式"},
-			{9,"タンカー護衛任務"},
-			{10,"強行偵察任務"},
-			{11,"ボーキサイト輸送任務"},
-			{12,"資源輸送任務"},
-			{13,"鼠輸送作戦"},
-			{14,"包囲陸戦隊撤収作戦"},
-			{15,"囮機動部隊支援作戦"},
-			{16,"艦隊決戦援護作戦"},
-			{17,"敵地偵察作戦"},
-			{18,"航空機輸送作戦"},
-			{19,"北号作戦"},
-			{20,"潜水艦哨戒任務"},
-			{21,"北方鼠輸送作戦"},
-			{22,"艦隊演習"},
-			{23,"航空戦艦運用演習"},
-			{24,unknownName},
-			{25,"通商破壊作戦"},
-			{26,"敵母港空襲作戦"},
-			{27,"潜水艦通商破壊作戦"},
-			{28,"西方海域封鎖作戦"},
-			{29,"潜水艦派遣演習"},
-			{30,"潜水艦派遣作戦"},
-			{31,"海外艦との接触"},
-			{32,unknownName},
-			{33,"前衛支援任務"},
-			{34,"艦隊決戦支援任務"},
-			{35,"MO作戦"},
-			{36,"水上機基地建設"},
-			{37,"東京急行"},
-			{38,"東京急行(弐)"}
-        };
-
 	}
 }

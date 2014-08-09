@@ -67,45 +67,160 @@ namespace Grabacr07.KanColleWrapper.Models
 			get { return this.RawData.api_exp.Get(1) ?? 0; }
 		}
 
+		#region HP 変更通知プロパティ
+
+		private LimitedValue _HP;
+
 		/// <summary>
 		/// 耐久値を取得します。
 		/// </summary>
-		public LimitedValue HP { get; private set; }
+		public LimitedValue HP
+		{
+			get { return this._HP; }
+			private set
+			{
+				this._HP = value;
+				this.RaisePropertyChanged();
+			}
+		}
+
+		#endregion
+
+		#region Fuel 変更通知プロパティ
+
+		private LimitedValue _Fuel;
 
 		/// <summary>
 		/// 燃料を取得します。
 		/// </summary>
-		public LimitedValue Fuel { get; private set; }
+		public LimitedValue Fuel
+		{
+			get { return this._Fuel; }
+			private set
+			{
+				this._Fuel = value;
+				this.RaisePropertyChanged();
+			}
+		}
 
-		/// <summary>
-		/// 弾薬を取得します。
-		/// </summary>
-		public LimitedValue Bull { get; private set; }
+		#endregion
+
+		#region Bull 変更通知プロパティ
+
+		private LimitedValue _Bull;
+
+		public LimitedValue Bull
+		{
+			get { return this._Bull; }
+			private set
+			{
+				this._Bull = value;
+				this.RaisePropertyChanged();
+			}
+		}
+
+		#endregion
+
+
+		#region Firepower 変更通知プロパティ
+
+		private ModernizableStatus _Firepower;
 
 		/// <summary>
 		/// 火力ステータス値を取得します。
 		/// </summary>
-		public ModernizableStatus Firepower { get; private set; }
+		public ModernizableStatus Firepower
+		{
+			get { return this._Firepower; }
+			private set
+			{
+				this._Firepower = value;
+				this.RaisePropertyChanged();
+
+			}
+		}
+
+		#endregion
+
+		#region Torpedo 変更通知プロパティ
+
+		private ModernizableStatus _Torpedo;
 
 		/// <summary>
 		/// 雷装ステータス値を取得します。
 		/// </summary>
-		public ModernizableStatus Torpedo { get; private set; }
+		public ModernizableStatus Torpedo
+		{
+			get { return this._Torpedo; }
+			private set
+			{
+				this._Torpedo = value;
+				this.RaisePropertyChanged();
+
+			}
+		}
+
+		#endregion
+
+		#region AA 変更通知プロパティ
+
+		private ModernizableStatus _AA;
 
 		/// <summary>
 		/// 対空ステータス値を取得します。
 		/// </summary>
-		public ModernizableStatus AA { get; private set; }
+		public ModernizableStatus AA
+		{
+			get { return this._AA; }
+			private set
+			{
+				this._AA = value;
+				this.RaisePropertyChanged();
+			}
+
+		}
+
+		#endregion
+
+		#region Armer 変更通知プロパティ
+
+		private ModernizableStatus _Armer;
 
 		/// <summary>
 		/// 装甲ステータス値を取得します。
 		/// </summary>
-		public ModernizableStatus Armer { get; private set; }
+		public ModernizableStatus Armer
+		{
+			get { return this._Armer; }
+			private set
+			{
+				this._Armer = value;
+				this.RaisePropertyChanged();
+
+			}
+		}
+
+		#endregion
+
+		#region Luck 変更通知プロパティ
+
+		private ModernizableStatus _Luck;
 
 		/// <summary>
 		/// 運のステータス値を取得します。
 		/// </summary>
-		public ModernizableStatus Luck { get; private set; }
+		public ModernizableStatus Luck
+		{
+			get { return this._Luck; }
+			private set
+			{
+				this._Luck = value;
+				this.RaisePropertyChanged();
+			}
+		}
+
+		#endregion
+
 
 		/// <summary>
 		/// 装備によるボーナスを含めた索敵ステータス値を取得します。
@@ -141,12 +256,70 @@ namespace Grabacr07.KanColleWrapper.Models
 
 
 		public SlotItem[] SlotItems { get; private set; }
-		public int[] OnSlot { get; private set; }
+
+		#region OnSlot 変更通知プロパティ
+
+		private int[] _OnSlot;
+
+		/// <summary>
+		/// 各装備スロットの艦載機数を取得します。
+		/// </summary>
+		public int[] OnSlot
+		{
+			get { return this._OnSlot; }
+			private set
+			{
+				if (this._OnSlot != value)
+				{
+					this._OnSlot = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
+
+		#endregion
+
+		#region IsInRepairing 変更通知プロパティ
+
+		private bool _IsInRepairing;
+
+		/// <summary>
+		/// この艦が入渠中かどうかを示す値を取得します。
+		/// </summary>
+		public bool IsInRepairing
+		{
+			get { return this._IsInRepairing; }
+			internal set
+			{
+				if (this._IsInRepairing != value)
+				{
+					this._IsInRepairing = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
+
+		#endregion
+
+		/// <summary>
+		/// この艦が出撃した海域を識別する整数値を取得します。
+		/// </summary>
+		public int SallyArea
+		{
+			get { return this.RawData.api_sally_area; }
+		}
+
 
 		internal Ship(Homeport parent, kcsapi_ship2 rawData)
 			: base(rawData)
 		{
 			this.homeport = parent;
+			this.Update(rawData);
+		}
+
+		internal void Update(kcsapi_ship2 rawData)
+		{
+			this.UpdateRawData(rawData);
 
 			this.Info = KanColleClient.Current.Master.Ships[rawData.api_ship_id] ?? ShipInfo.Dummy;
 			this.HP = new LimitedValue(this.RawData.api_nowhp, this.RawData.api_maxhp, 0);
@@ -162,7 +335,7 @@ namespace Grabacr07.KanColleWrapper.Models
 				this.Luck = new ModernizableStatus(this.Info.RawData.api_luck, this.RawData.api_kyouka[4]);
 			}
 
-			this.SlotItems = this.RawData.api_slot.Select(id => this.homeport.SlotItems[id]).Where(x => x != null).ToArray();
+			this.SlotItems = this.RawData.api_slot.Select(id => this.homeport.Itemyard.SlotItems[id]).Where(x => x != null).ToArray();
 			this.OnSlot = this.RawData.api_onslot;
 		}
 
@@ -174,6 +347,11 @@ namespace Grabacr07.KanColleWrapper.Models
 			this.OnSlot = onslot;
 		}
 
+		internal void Repair()
+		{
+			var max = this.HP.Maximum;
+			this.HP = this.HP.Update(max);
+		}
 
 		public override string ToString()
 		{
