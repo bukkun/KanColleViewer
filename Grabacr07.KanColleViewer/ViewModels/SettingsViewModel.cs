@@ -12,6 +12,7 @@ using Grabacr07.KanColleViewer.Properties;
 using Grabacr07.KanColleViewer.ViewModels.Composition;
 using Grabacr07.KanColleViewer.ViewModels.Messages;
 using Grabacr07.KanColleWrapper;
+using Grabacr07.KanColleWrapper.Models;
 using Livet.EventListeners;
 using Livet.Messaging;
 using Livet.Messaging.IO;
@@ -247,6 +248,25 @@ namespace Grabacr07.KanColleViewer.ViewModels
 		#endregion
 
 
+		#region ViewRangeSettingsCollection 変更通知プロパティ
+
+		private List<ViewRangeSettingsViewModel> _ViewRangeSettingsCollection;
+
+		public List<ViewRangeSettingsViewModel> ViewRangeSettingsCollection
+		{
+			get { return this._ViewRangeSettingsCollection; }
+			set
+			{
+				if (this._ViewRangeSettingsCollection != value)
+				{
+					this._ViewRangeSettingsCollection = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
+
+		#endregion
+
 
 		#region SoundFile
 
@@ -303,6 +323,10 @@ namespace Grabacr07.KanColleViewer.ViewModels
 			});
 			this.BrowserZoomFactor = zoomFactor;
 
+			this.ViewRangeSettingsCollection = ViewRangeCalcLogic.Logics
+				.Select(x => new ViewRangeSettingsViewModel(x))
+				.ToList();
+
 			this.ReloadPlugins();
 		}
 
@@ -357,6 +381,34 @@ namespace Grabacr07.KanColleViewer.ViewModels
 		{
 			this.NotifierPlugins = new List<NotifierViewModel>(PluginHost.Instance.Notifiers.Select(x => new NotifierViewModel(x)));
 			this.ToolPlugins = new List<ToolViewModel>(PluginHost.Instance.Tools.Select(x => new ToolViewModel(x)));
+		}
+
+
+		public class ViewRangeSettingsViewModel
+		{
+			private bool selected;
+
+			public ICalcViewRange Logic { get; set; }
+
+			public bool Selected
+			{
+				get { return this.selected; }
+				set
+				{
+					this.selected = value;
+					if (value)
+					{
+						Settings.Current.KanColleClientSettings.ViewRangeCalcType = this.Logic.Id;
+						foreach (var f in KanColleClient.Current.Homeport.Organization.Fleets) f.Value.Calculate();
+					}
+				}
+			}
+
+			public ViewRangeSettingsViewModel(ICalcViewRange logic)
+			{
+				this.Logic = logic;
+				this.selected = Settings.Current.KanColleClientSettings.ViewRangeCalcType == logic.Id;
+			}
 		}
 	}
 }

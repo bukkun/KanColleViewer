@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Grabacr07.KanColleWrapper.Models.Raw;
 using Grabacr07.KanColleWrapper.Internal;
 using Livet;
+using Livet.EventListeners.WeakEvents;
 
 namespace Grabacr07.KanColleWrapper.Models
 {
@@ -16,6 +17,7 @@ namespace Grabacr07.KanColleWrapper.Models
 		private readonly Homeport homeport;
 		private Ship[] originalShips; // null も含んだやつ
 		private bool isInSortie;
+		private LivetCompositeDisposable compositeDisposable;
 
 		#region Id 変更通知プロパティ
 
@@ -143,12 +145,12 @@ namespace Grabacr07.KanColleWrapper.Models
 
 		#region TotalViewRange 変更通知プロパティ
 
-		private int _TotalViewRange;
+		private double _TotalViewRange;
 
 		/// <summary>
 		/// 各艦娘の装備によるボーナスを含めた、艦隊の索敵合計値を取得します。
 		/// </summary>
-		public int TotalViewRange
+		public double TotalViewRange
 		{
 			get { return this._TotalViewRange; }
 			private set
@@ -311,6 +313,14 @@ namespace Grabacr07.KanColleWrapper.Models
 			this.Condition = new FleetCondition(this);
 			this.Expedition = new Expedition(this);
 			this.Update(rawData);
+
+			this.compositeDisposable = new LivetCompositeDisposable
+			{
+				new PropertyChangedWeakEventListener(KanColleClient.Current.Settings)
+				{
+					{ "ViewRangeCalcLogic", (sender, args) => this.Calculate() }
+				}
+			};
 		}
 
 
@@ -390,12 +400,12 @@ namespace Grabacr07.KanColleWrapper.Models
 		/// <summary>
 		/// 艦隊の平均レベルや制空戦力などの各種数値を再計算します。
 		/// </summary>
-		internal void Calculate()
+		public void Calculate()
 		{
 			this.TotalLevel = this.Ships.HasItems() ? this.Ships.Sum(x => x.Level) : 0;
 			this.AverageLevel = this.Ships.HasItems() ? (double)this.TotalLevel / this.Ships.Length : 0.0;
 			this.AirSuperiorityPotential = this.Ships.Sum(s => s.CalcAirSuperiorityPotential());
-			this.TotalViewRange = this.Ships.Sum(s => s.ViewRange);
+			this.TotalViewRange = ViewRangeCalcLogic.Get(KanColleClient.Current.Settings.ViewRangeCalcType).Calc(this);
 			this.Speed = this.Ships.All(s => s.Info.Speed == Speed.Fast) ? Speed.Fast : Speed.Low;
 		}
 
@@ -473,6 +483,7 @@ namespace Grabacr07.KanColleWrapper.Models
 
 		public virtual void Dispose()
 		{
+			this.compositeDisposable.Dispose();
 			this.Expedition.SafeDispose();
 			this.Condition.SafeDispose();
 		}

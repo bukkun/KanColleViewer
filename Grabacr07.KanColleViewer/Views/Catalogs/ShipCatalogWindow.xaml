@@ -379,7 +379,7 @@
 						</WrapPanel>
 					</Border>
 
-					<Border BorderThickness="1"
+					<!--<Border BorderThickness="1"
 							BorderBrush="{DynamicResource BorderBrushKey}"
 							Margin="0,8,0,0"
 							Padding="5">
@@ -399,7 +399,7 @@
 									  IsChecked="{Binding Midway}"
 									  Margin="10,0" />
 						</WrapPanel>
-					</Border>
+					</Border>-->
 				</StackPanel>
 			</Expander>
 
@@ -668,7 +668,7 @@
 								</GridViewColumn.CellTemplate>
 							</GridViewColumn>
 
-							<GridViewColumn Width="65">
+							<!--<GridViewColumn Width="65">
 								<GridViewColumn.Header>
 									<TextBlock Text="出撃海域" />
 								</GridViewColumn.Header>
@@ -703,7 +703,7 @@
 										</DataTemplate.Triggers>
 									</DataTemplate>
 								</GridViewColumn.CellTemplate>
-							</GridViewColumn>
+							</GridViewColumn>-->
 
 							<GridViewColumn Width="110">
 								<GridViewColumn.Header>
@@ -711,7 +711,7 @@
 								</GridViewColumn.Header>
 								<GridViewColumn.CellTemplate>
 									<DataTemplate DataType="{x:Type contentsVm:ShipViewModel}">
-										<ItemsControl ItemsSource="{Binding Ship.SlotItems}">
+										<ItemsControl ItemsSource="{Binding Ship.EquippedSlots}">
 											<ItemsControl.Template>
 												<ControlTemplate TargetType="{x:Type ItemsControl}">
 													<StackPanel IsItemsHost="True"
@@ -720,12 +720,12 @@
 											</ItemsControl.Template>
 											<ItemsControl.ItemTemplate>
 												<DataTemplate>
-													<Border ToolTip="{Binding Info.Name}"
+													<Border ToolTip="{Binding Item.Info.Name}"
 															Background="Transparent"
 															Height="20"
 															Padding="0,1">
 														<Viewbox>
-															<controls:SlotItemIcon Type="{Binding Info.IconType}"
+															<controls:SlotItemIcon Type="{Binding Item.Info.IconType}"
 																				   Margin="0,0,4,0" />
 														</Viewbox>
 													</Border>

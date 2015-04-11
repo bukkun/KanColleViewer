@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Grabacr07.KanColleWrapper.Internal;
 using Grabacr07.KanColleWrapper.Models;
 
 namespace Grabacr07.KanColleWrapper
 {
-	static class Calculator
+	internal static class Calculator
 	{
 		/// <summary>
 		/// 装備と搭載数を指定して、スロット単位の制空能力を計算します。
@@ -30,7 +30,7 @@ namespace Grabacr07.KanColleWrapper
 		/// </summary>
 		public static int CalcAirSuperiorityPotential(this Ship ship)
 		{
-			return ship.SlotItems.Zip(ship.OnSlot, (item, i) => item.CalcAirSuperiorityPotential(i)).Sum();
+			return ship.EquippedSlots.Select(x => x.Item.CalcAirSuperiorityPotential(x.Current)).Sum();
 		}
 	}
 }
