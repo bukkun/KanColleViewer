@@ -79,7 +79,7 @@
 							           Grid.Column="1"
 							           VerticalAlignment="Center"
 							           Margin="10,0">
-								<Run Text="{Binding Expedition.Name, Mode=OneWay}"
+								<Run Text="{Binding Expedition.Mission.Title, Mode=OneWay}"
 								     FontSize="14"
 								     Style="{DynamicResource PickupTextElementStyleKey}" />
 								<LineBreak />
